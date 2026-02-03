@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{36D591C7-65C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusLing.Domain", "NexusLing.Domain\NexusLing.Domain.csproj", "{9A8E39E7-47D6-479C-B3CA-5B345D92E4BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusLing.Application", "NexusLing.Application\NexusLing.Application.csproj", "{693A59BF-380F-4663-BF41-0A45DFA913A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{9A8E39E7-47D6-479C-B3CA-5B345D92E4BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A8E39E7-47D6-479C-B3CA-5B345D92E4BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A8E39E7-47D6-479C-B3CA-5B345D92E4BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693A59BF-380F-4663-BF41-0A45DFA913A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693A59BF-380F-4663-BF41-0A45DFA913A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693A59BF-380F-4663-BF41-0A45DFA913A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693A59BF-380F-4663-BF41-0A45DFA913A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9A8E39E7-47D6-479C-B3CA-5B345D92E4BD} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{693A59BF-380F-4663-BF41-0A45DFA913A6} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {198848EF-DA5C-4674-841F-2B2F7E99899D}
