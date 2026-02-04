@@ -2,7 +2,17 @@
 {
     public interface IRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
+        /// <summary>
+        /// Полные данные объекта, включая данные других объектов через внешние связи
+        /// Может быть переопределён в конкретной реализации объекта данных
+        /// По умолчанию соответствует значению PlainData
+        /// </summary>
+        IQueryable<T> Data { get; }
+        /// <summary>
+        /// Данные только одной таблицы.
+        /// Объекты (поля) связей с другими таблицами не заполнены (null)
+        /// </summary>
+        IQueryable<T> PlainData { get; }
         Task<T> GetAsync(Guid id);
         Task<T> AddAsync(T entity);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entity);
