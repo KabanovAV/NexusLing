@@ -1,0 +1,6 @@
+@NexusLing.WebApi_HostAddress = http://localhost:5226
+
+GET {{NexusLing.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
