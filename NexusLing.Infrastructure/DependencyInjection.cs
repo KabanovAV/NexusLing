@@ -13,10 +13,8 @@ namespace NexusLing.Infrastructure
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            //var connectionString = configuration.GetConnectionString("Database");
-            //services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=NexusLing;Username=postgres;Password=123456"));
+            var connectionString = configuration.GetConnectionString("Database");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));            
             services.AddScoped<IApplicationDbContext>(options => options.GetRequiredService<ApplicationDbContext>());
             return services;
         }
