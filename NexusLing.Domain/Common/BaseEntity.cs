@@ -1,4 +1,4 @@
-﻿namespace NexusLing.Domain
+﻿namespace NexusLing.Domain.Common
 {
     public class BaseEntity
     {
