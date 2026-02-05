@@ -19,7 +19,7 @@ namespace NexusLing.WebApi
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("NexusLing", new OpenApiInfo
+                options.SwaggerDoc("nexusling", new OpenApiInfo
                 {
                     Title = "NexusLing API",
                     Version = "v0",
