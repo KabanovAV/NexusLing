@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NexusLing.Domain;
+using NexusLing.Domain.Entities;
 
-namespace NexusLing.Application
+namespace NexusLing.Application.Common.Interfaces.Database
 {
     public interface IApplicationDbContext
     {
