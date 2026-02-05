@@ -9,13 +9,8 @@ namespace NexusLing.Infrastructure.Database
     {
         public DbSet<User> Users { get; set; }
 
-        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        //    : base(options) { }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=NexusLing;Username=postgres;Password=123456");
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
