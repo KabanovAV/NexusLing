@@ -1,6 +1,4 @@
-﻿using NexusLing.Domain.Common;
-
-namespace NexusLing.Domain.Entities
+﻿namespace NexusLing.Domain
 {
     public class User : BaseAuditableEntity
     {

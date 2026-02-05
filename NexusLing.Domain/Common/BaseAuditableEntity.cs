@@ -1,4 +1,4 @@
-﻿namespace NexusLing.Domain.Common
+﻿namespace NexusLing.Domain
 {
     public class BaseAuditableEntity : BaseEntity
     {
