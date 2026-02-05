@@ -33,7 +33,7 @@ namespace NexusLing.WebApi
                     License = new OpenApiLicense
                     {
                         Name = "NexusLing License",
-                        Url = new Uri("https://nexushockey/about-us")
+                        Url = new Uri("https://nexusling/about-us")
                     }
                 });
 
