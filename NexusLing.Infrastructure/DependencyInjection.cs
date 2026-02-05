@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NexusLing.Application.Common.Interfaces.Database;
+using NexusLing.Application.Interfaces;
 using NexusLing.Infrastructure.Database;
 
 namespace NexusLing.Infrastructure

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using NexusLing.Application.Common.Interfaces.Repositories;
+using NexusLing.Application.Interfaces;
 using NexusLing.Infrastructure.Database;
 
 namespace NexusLing.Infrastructure.Repositories
