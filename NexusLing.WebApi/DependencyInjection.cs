@@ -9,11 +9,12 @@ namespace NexusLing.WebApi
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
+            services.AddSwagger();
             services.AddInfrastructure(configuration);
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        private static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
