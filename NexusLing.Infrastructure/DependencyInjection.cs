@@ -13,8 +13,8 @@ namespace NexusLing.Infrastructure
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            //var connectionString = configuration.GetConnectionString("Database");
-            //services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));            
+            var connectionString = configuration.GetConnectionString("Database");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
             services.AddScoped<IApplicationDbContext>(options => options.GetRequiredService<ApplicationDbContext>());
             return services;
         }
