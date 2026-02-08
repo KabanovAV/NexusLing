@@ -1,4 +1,4 @@
-﻿namespace NexusLing.Application.Interfaces
+﻿namespace NexusLing.Domain.Interfaces
 {
     /// <summary>
     /// Интерфейс к операциям доступным у объектов в репозиториях

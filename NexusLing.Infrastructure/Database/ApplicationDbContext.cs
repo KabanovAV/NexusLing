@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NexusLing.Application.Interfaces;
+using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.Common;
 using NexusLing.Domain.Entities;
 
