@@ -1,5 +1,4 @@
-﻿using NexusLing.Domain.Common.Interfaces.Repositories;
-using NexusLing.Domain.Interfaces;
+﻿using NexusLing.Domain.Interfaces;
 using NexusLing.Infrastructure.Database;
 
 namespace NexusLing.Infrastructure.Repositories

@@ -1,6 +1,4 @@
-﻿using NexusLing.Domain.Interfaces;
-
-namespace NexusLing.Domain.Common.Interfaces.Repositories
+﻿namespace NexusLing.Domain.Interfaces
 {
     /// <summary>
     /// Интерфейс к репозиториям данных
