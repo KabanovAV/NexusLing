@@ -1,15 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NexusLing.Domain.Common.Interfaces.Repositories;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Infrastructure.Database;
+using NexusLing.Infrastructure.Repositories;
 
 namespace NexusLing.Infrastructure
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
-            => services.AddDatabase(configuration);
+            => services.AddDatabase(configuration)
+                .AddRepository();
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
@@ -18,5 +21,8 @@ namespace NexusLing.Infrastructure
             services.AddScoped<IApplicationDbContext>(options => options.GetRequiredService<ApplicationDbContext>());
             return services;
         }
+
+        public static IServiceCollection AddRepository(this IServiceCollection services)
+            => services.AddScoped<IRepository, Repository>();
     }
 }
