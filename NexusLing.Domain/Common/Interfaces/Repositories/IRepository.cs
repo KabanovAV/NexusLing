@@ -22,7 +22,7 @@
         /// Получить один объект из набора данных
         /// </summary>
         /// <param name="id">Id объекта</param>
-        /// <returns></returns>
+        /// <returns>Возвращает объект из набора данных</returns>
         Task<TEntity> GetAsync(TKey id);
         /// <summary>
         /// Добавить один объект в набор данных
