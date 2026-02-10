@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using NexusLing.Domain.Common;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Infrastructure.Database;
 
@@ -13,11 +14,12 @@ namespace NexusLing.Infrastructure.Repositories
     public class RepositoryOperations<TEntity, TKey> : IRepositoryOperations<TEntity, TKey> where TEntity : class, new()
     {
         private ApplicationDbContext Context { get; set; }
-        private DbSet<TEntity> DbSet => Context.Set<TEntity>();
+        private DbSet<TEntity> DbSet;
 
         public RepositoryOperations(ApplicationDbContext context)
         {
             Context = context;
+            DbSet = context.Set<TEntity>();
         }
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace NexusLing.Infrastructure.Repositories
         /// <returns>Объект после добавления в БД</returns>
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
+            ApplieAuditable();
             EntityEntry<TEntity> value = await DbSet.AddAsync(entity);
             await Context.SaveChangesAsync();
             return value.Entity;
@@ -62,6 +65,7 @@ namespace NexusLing.Infrastructure.Repositories
             List<TEntity> entityList = [.. entities];
             if (entityList.Count == 0)
                 return [];
+            ApplieAuditable();
             await DbSet.AddRangeAsync(entityList);
             await Context.SaveChangesAsync();
             return entityList;
@@ -73,6 +77,7 @@ namespace NexusLing.Infrastructure.Repositories
         /// <param name="entity">Изменяемый объект</param>
         public virtual async Task Update(TEntity entity)
         {
+            ApplieAuditable();
             DbSet.Update(entity);
             await Context.SaveChangesAsync();
         }
@@ -86,6 +91,7 @@ namespace NexusLing.Infrastructure.Repositories
             List<TEntity> entityList = [.. entities];
             if (entityList.Count == 0)
                 return;
+            ApplieAuditable();
             DbSet.UpdateRange(entityList);
             await Context.SaveChangesAsync();
         }
@@ -96,7 +102,9 @@ namespace NexusLing.Infrastructure.Repositories
         /// <param name="id">Id объекта</param>
         public virtual async Task Delete(TKey id)
         {
-            var entity = DbSet.Find(id);
+            var entity = await GetAsync(id);
+            if (entity == null)
+                return;
             DbSet.Remove(entity);
             await Context.SaveChangesAsync();
         }
@@ -107,15 +115,15 @@ namespace NexusLing.Infrastructure.Repositories
         /// <param name="ids">Id объектов</param>
         public virtual async Task DeleteRange(IEnumerable<TKey> ids)
         {
-            if (ids is ICollection<TEntity> idCollection && idCollection.Count > 0)
-            {
-                List<TEntity> entityList = await DbSet.Where(e => ids.Contains(EF.Property<TKey>(e, "Id")))
+            List<TKey> idList = [.. ids];
+            if (idList.Count == 0)
+                return;
+            List<TEntity> entityList = await DbSet.Where(e => idList.Contains(EF.Property<TKey>(e, "Id")))
                     .ToListAsync();
-                if (entityList.Count == 0)
-                    return;
-                DbSet.RemoveRange(entityList);
-                await Context.SaveChangesAsync();
-            }
+            if (entityList.Count == 0)
+                return;
+            DbSet.RemoveRange(entityList);
+            await Context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -139,6 +147,31 @@ namespace NexusLing.Infrastructure.Repositories
                 return;
             DbSet.RemoveRange(entityList);
             await Context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Установка значений аудита
+        /// </summary>
+        private void ApplieAuditable()
+        {
+            var entities = Context.ChangeTracker.Entries<BaseAuditableEntity>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+            foreach (var entity in entities)
+            {
+                switch (entity.State)
+                {
+                    case EntityState.Modified:
+                        entity.Entity.DateUpdated = DateTime.UtcNow;
+                        break;
+                    case EntityState.Added:
+                        entity.Entity.DateCreated = DateTime.UtcNow;
+                        entity.Entity.DateUpdated = DateTime.UtcNow;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }
