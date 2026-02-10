@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TEntity">Объект, представляющий таблицу из БД</typeparam>
     /// <typeparam name="TKey">Объект, представляющий тип Id</typeparam>
-    public interface IRepository<TEntity, TKey> where TEntity : class
+    public interface IRepositoryOperations<TEntity, TKey> where TEntity : class
     {
         /// <summary>
         /// Полные данные объекта, включая данные других объектов через внешние связи

@@ -8,7 +8,7 @@ namespace NexusLing.Infrastructure.Repositories
     /// <summary>
     /// Базовые операциии доступные для репозитория пользователь
     /// </summary>
-    public class UserRepository : Repository<User, Guid>, IUserRepository
+    public class UserRepository : RepositoryOperations<User, Guid>, IUserRepository
     {
         public UserRepository(ApplicationDbContext db)
             : base(db) { }

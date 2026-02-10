@@ -5,7 +5,7 @@ namespace NexusLing.Domain.Interfaces
     /// <summary>
     /// Интерфейс с операциями для репозитория пользователь
     /// </summary>
-    public interface IUserRepository : IRepository<User, Guid>
+    public interface IUserRepository : IRepositoryOperations<User, Guid>
     {
         /// <summary>
         /// Получение всех пользователей из набора данных

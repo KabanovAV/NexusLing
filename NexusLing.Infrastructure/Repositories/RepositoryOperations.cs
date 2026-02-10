@@ -10,12 +10,12 @@ namespace NexusLing.Infrastructure.Repositories
     /// </summary>
     /// <typeparam name="TEntity">DBDataContext или DBDocContext</typeparam>
     /// <typeparam name="TKey">Объект, представляющий тип Id</typeparam>
-    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class, new()
+    public class RepositoryOperations<TEntity, TKey> : IRepositoryOperations<TEntity, TKey> where TEntity : class, new()
     {
         private ApplicationDbContext Context { get; set; }
         private DbSet<TEntity> DbSet => Context.Set<TEntity>();
 
-        public Repository(ApplicationDbContext context)
+        public RepositoryOperations(ApplicationDbContext context)
         {
             Context = context;
         }
