@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using NexusLing.Application;
 using NexusLing.Infrastructure;
 using System.Reflection;
 
@@ -11,6 +12,7 @@ namespace NexusLing.WebApi
             services.AddControllers();
             services.AddSwagger();
             services.AddInfrastructure(configuration);
+            services.AddApplication();
             return services;
         }
 
