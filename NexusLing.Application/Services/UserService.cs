@@ -1,5 +1,6 @@
-﻿using NexusLing.Application.Interfaces;
-using NexusLing.Domain.Entities;
+﻿using NexusLing.Application.Common.Mappings;
+using NexusLing.Application.DTOs;
+using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
 
 namespace NexusLing.Application.Services
@@ -20,36 +21,50 @@ namespace NexusLing.Application.Services
         /// Получение всех пользователей из набора данных
         /// </summary>
         /// <returns>Возвращает список всех пользователей из набора данных</returns>
-        public async Task<IEnumerable<User>> GetAllUserAsync()
-            => await _repository.UserRepository.GetAllUserAsync();
+        public async Task<IEnumerable<UserDTO>> GetAllUserAsync()
+        {
+            var users = await _repository.UserRepository.GetAllUserAsync();
+            return users.ToDto();
+        }
 
         /// <summary>
         /// Получение одного пользователя из набора данных
         /// </summary>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        public async Task<User> GetUserAsync(Guid id)
-            => await _repository.UserRepository.GetUserAsync(id);
+        public async Task<UserDTO> GetUserAsync(Guid id)
+        {
+            var user = await _repository.UserRepository.GetUserAsync(id);
+            return user.ToDto();
+        }
 
         /// <summary>
         /// Добавить одиного пользователя в набор данных
         /// </summary>
-        /// <param name="user">Добавляемый пользователь</param>
+        /// <param name="rUser">Добавляемый пользователь</param>
         /// <returns>Объект после добавления в БД</returns>
-        public async Task<User> AddUserAsync(User user)
-            => await _repository.UserRepository.AddAsync(user);
+        public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
+        {
+            var user = rUser.ToEntity();
+            await _repository.UserRepository.AddAsync(user);
+            return user.ToDto();
+        }
 
         /// <summary>
         /// Изменить одиного пользователя в наборе данных
         /// </summary>
-        /// <param name="user">Изменяемый пользователь</param>
-        public async Task UpdateUserAsync(User user)
-            => await _repository.UserRepository.Update(user);
+        /// <param name="uUser">Изменяемый пользователь</param>
+        public async Task UpdateUserAsync(Guid id, UpdateUserDTO uUser)
+        {
+            var user = await _repository.UserRepository.GetUserAsync(id);
+            user.UpdateDto(uUser);
+            await _repository.UserRepository.Update(user);
+        }
 
         /// <summary>
         /// Удалить одиного пользователя из набора данных
         /// </summary>
-        /// <param name="user">Удаляемый пользователь</param>
-        public async Task DeleteUserAsync(User user)
-            => await _repository.UserRepository.Delete(user);
+        /// <param name="id">Id пользователя</param>
+        public async Task DeleteUserAsync(Guid id)
+            => await _repository.UserRepository.Delete(id);
     }
 }

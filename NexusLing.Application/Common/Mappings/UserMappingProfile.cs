@@ -1,5 +1,4 @@
-﻿using NexusLing.Application.DTOs.Commands;
-using NexusLing.Application.DTOs.Queries;
+﻿using NexusLing.Application.DTOs;
 using NexusLing.Domain.Entities;
 
 namespace NexusLing.Application.Common.Mappings
@@ -97,5 +96,23 @@ namespace NexusLing.Application.Common.Mappings
         /// <returns>Возвращает список User</returns>
         public static List<User> ToEntity(this IEnumerable<UpdateUserDTO> uDtos)
             => [.. uDtos.Where(uDto => uDto != null).Select(uDto => uDto.ToEntity())];
+
+        /// <summary>
+        /// Маппинг обновления обьекта User
+        /// </summary>
+        /// <param name="entity">Обьект User</param>
+        /// <param name="dto">Обьект UpdateUserDTO</param>
+        public static void UpdateDto(this User entity, UpdateUserDTO dto)
+        {
+            if (dto == null) return;
+            if (dto.FirstName != null && !string.IsNullOrEmpty(dto.FirstName) && entity.FirstName != dto.FirstName)
+                entity.FirstName = dto.FirstName;
+            if (dto.LastName != null && !string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
+                entity.LastName = dto.LastName;
+            if (dto.Login != null && !string.IsNullOrEmpty(dto.Login) && entity.Login != dto.Login)
+                entity.Login = dto.Login;
+            if (dto.Password != null && !string.IsNullOrEmpty(dto.Password) && entity.Password != dto.Password)
+                entity.Password = dto.Password;
+        }
     }
 }
