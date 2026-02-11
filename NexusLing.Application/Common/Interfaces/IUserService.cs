@@ -3,7 +3,7 @@
 namespace NexusLing.Application.Interfaces
 {
     /// <summary>
-    /// Интерфейс с операциями для сервиса пользователь
+    /// Интерфейс сервиса операциями для обьекта пользователь
     /// </summary>
     public interface IUserService
     {
