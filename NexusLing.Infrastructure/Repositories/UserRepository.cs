@@ -26,27 +26,5 @@ namespace NexusLing.Infrastructure.Repositories
         /// <returns>Возвращает одного пользователя из набора данных</returns>
         public async Task<User> GetUserAsync(Guid id)
             => await GetAsync(id);
-
-        /// <summary>
-        /// Добавить одиного пользователя в набор данных
-        /// </summary>
-        /// <param name="user">Добавляемый пользователь</param>
-        /// <returns>Объект после добавления в БД</returns>
-        public async Task<User> AddUserAsync(User user)
-            => await AddAsync(user);
-
-        /// <summary>
-        /// Изменить одиного пользователя в наборе данных
-        /// </summary>
-        /// <param name="user">Изменяемый пользователь</param>
-        public async Task UpdateUserAsync(User user)
-            => await Update(user);
-
-        /// <summary>
-        /// Удалить одиного пользователя из набора данных
-        /// </summary>
-        /// <param name="user">Удаляемый пользователь</param>
-        public async Task DeleteUserAsync(User user)
-            => await Delete(user);
     }
 }

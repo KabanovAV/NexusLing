@@ -36,20 +36,20 @@ namespace NexusLing.Application.Services
         /// <param name="user">Добавляемый пользователь</param>
         /// <returns>Объект после добавления в БД</returns>
         public async Task<User> AddUserAsync(User user)
-            => await _repository.UserRepository.AddUserAsync(user);
+            => await _repository.UserRepository.AddAsync(user);
 
         /// <summary>
         /// Изменить одиного пользователя в наборе данных
         /// </summary>
         /// <param name="user">Изменяемый пользователь</param>
         public async Task UpdateUserAsync(User user)
-            => await _repository.UserRepository.UpdateUserAsync(user);
+            => await _repository.UserRepository.Update(user);
 
         /// <summary>
         /// Удалить одиного пользователя из набора данных
         /// </summary>
         /// <param name="user">Удаляемый пользователь</param>
         public async Task DeleteUserAsync(User user)
-            => await _repository.UserRepository.DeleteUserAsync(user);
+            => await _repository.UserRepository.Delete(user);
     }
 }
