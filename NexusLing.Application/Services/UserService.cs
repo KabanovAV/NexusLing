@@ -61,7 +61,7 @@ namespace NexusLing.Application.Services
         }
 
         /// <summary>
-        /// Удалить одиного пользователя из набора данных
+        /// Удалить одоного пользователя из набора данных
         /// </summary>
         /// <param name="id">Id пользователя</param>
         public async Task DeleteUserAsync(Guid id)

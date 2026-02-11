@@ -30,7 +30,7 @@ namespace NexusLing.Application.Interfaces
         /// <param name="user">Изменяемый пользователь</param>
         Task UpdateUserAsync(Guid id, UpdateUserDTO uUser);
         /// <summary>
-        /// Удалить одиного пользователя из набора данных
+        /// Удалить одоного пользователя из набора данных
         /// </summary>
         /// <param name="id">Id пользователя</param>
         Task DeleteUserAsync(Guid id);
