@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Entities;
-using NexusLing.Domain.Interfaces;
 
 namespace NexusLing.WebApi.Controllers
 {
@@ -8,11 +8,11 @@ namespace NexusLing.WebApi.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IUserService _service;
 
-        public UserController(IRepository repository)
+        public UserController(IUserService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
-            => Ok(await _repository.UserRepository.GetAllUserAsync());
+            => Ok(await _service.GetAllUserAsync());
 
         /// <summary>
         /// Получение пользователя по Id
@@ -37,7 +37,7 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
-            var user = await _repository.UserRepository.GetAsync(id);
+            var user = await _service.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound(new { Message = $"Пользователь с id {id} не найден." });
@@ -61,7 +61,7 @@ namespace NexusLing.WebApi.Controllers
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
             }
-            await _repository.UserRepository.AddAsync(user);
+            await _service.AddUserAsync(user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
@@ -83,7 +83,7 @@ namespace NexusLing.WebApi.Controllers
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
             }
-            var currentUser = await _repository.UserRepository.GetAsync(id);
+            var currentUser = await _service.GetUserAsync(id);
             if (currentUser == null)
             {
                 return NotFound(new { Message = $"Пользователь с id {id} не найден." });
@@ -94,7 +94,7 @@ namespace NexusLing.WebApi.Controllers
             currentUser.Login = user.Login;
             currentUser.Password = user.Password;
 
-            await _repository.UserRepository.UpdateUserAsync(currentUser);
+            await _service.UpdateUserAsync(currentUser);
             return NoContent();
         }
 
@@ -109,12 +109,12 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var user = await _repository.UserRepository.GetAsync(id);
+            var user = await _service.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound(new { Message = $"Пользователь с id {id} не найден." });
             }
-            await _repository.UserRepository.DeleteUserAsync(user);
+            await _service.DeleteUserAsync(user);
             return NoContent();
         }
     }
