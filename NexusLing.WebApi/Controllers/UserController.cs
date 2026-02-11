@@ -70,11 +70,11 @@ namespace NexusLing.WebApi.Controllers
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <param name="user">Измененные данные пользователя</param>
-        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Пустой обьект пользователя</response>
         /// <response code="404">Пользователь не найден</response>
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateUser(Guid id, User user)
@@ -102,10 +102,10 @@ namespace NexusLing.WebApi.Controllers
         /// Удаление данных о пользователе
         /// </summary>
         /// <param name="id">Id пользователя</param>
-        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="404">Пользователь не найден</response>
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
