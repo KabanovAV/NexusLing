@@ -73,6 +73,7 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="uUser">Измененные данные пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="404">Пользователь не найден</response>
+        /// <response code="404">Id не совпадают</response>
         [HttpPut("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -81,6 +82,10 @@ namespace NexusLing.WebApi.Controllers
             if (uUser == null)
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
+            }
+            if (id != uUser.Id)
+            {
+                return BadRequest(new { Message = "ID в URL и ID в теле запроса не совпадаю." });
             }
             await _service.UpdateUserAsync(id, uUser);
             return NoContent();

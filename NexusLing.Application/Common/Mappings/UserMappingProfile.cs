@@ -65,7 +65,7 @@ namespace NexusLing.Application.Common.Mappings
         /// <param name="entity">Обьект User</param>
         /// <returns>Возвращает UpdateUserDTO</returns>
         public static UpdateUserDTO? ToUpdateDto(this User entity)
-            => entity == null ? null : new(entity.FirstName, entity.LastName, entity.Login, entity.Password);
+            => entity == null ? null : new(entity.Id, entity.FirstName, entity.LastName, entity.Login, entity.Password);
 
         /// <summary>
         /// Маппинг списка из обьектов User в список UpdateUserDTO
