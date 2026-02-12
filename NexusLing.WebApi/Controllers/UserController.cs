@@ -29,19 +29,19 @@ namespace NexusLing.WebApi.Controllers
         /// <summary>
         /// Получение пользователя по Id
         /// </summary>
-        /// <param name="id">Id пользователя</param>
+        /// <param name="userId">Id пользователя</param>
         /// <returns>Возвращает пользователя</returns>
         /// <response code="200">Успешное выполнение запроса</response>
         /// <response code="404">Пользователь не найден</response>
-        [HttpGet("{id:guid}")]
+        [HttpGet("{userId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<User>> GetUser([FromRoute] Guid id)
+        public async Task<ActionResult<User>> GetUser([FromRoute] Guid userId)
         {
-            var user = await _service.GetUserAsync(id);
+            var user = await _service.GetUserAsync(userId);
             if (user == null)
             {
-                return NotFound(new { Message = $"Пользователь с id {id} не найден." });
+                return NotFound(new { Message = $"Пользователь с id {userId} не найден." });
             }
             return Ok(user);
         }
@@ -69,38 +69,38 @@ namespace NexusLing.WebApi.Controllers
         /// <summary>
         /// Обновление данных пользователя
         /// </summary>
-        /// <param name="id">Id пользователя</param>
+        /// <param name="userId">Id пользователя</param>
         /// <param name="uUser">Измененные данные пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="404">Пользователь не найден</response>
         /// <response code="404">Id не совпадают</response>
-        [HttpPut("{id:guid}")]
+        [HttpPut("{userId:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserDTO uUser)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
             if (uUser == null)
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
             }
-            if (id != uUser.Id)
+            if (userId != uUser.Id)
             {
                 return BadRequest(new { Message = "ID в URL и ID в теле запроса не совпадаю." });
             }
-            await _service.UpdateUserAsync(id, uUser);
+            await _service.UpdateUserAsync(userId, uUser);
             return NoContent();
         }
 
         /// <summary>
         /// Удаление данных о пользователе
         /// </summary>
-        /// <param name="id">Id пользователя</param>
+        /// <param name="userId">Id пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("{userId:guid}")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid userId)
         {
-            await _service.DeleteUserAsync(id);
+            await _service.DeleteUserAsync(userId);
             return NoContent();
         }
     }
