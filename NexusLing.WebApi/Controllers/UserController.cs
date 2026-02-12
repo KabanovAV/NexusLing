@@ -36,7 +36,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpGet("{id:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<User>> GetUser([FromRoute] Guid id)
         {
             var user = await _service.GetUserAsync(id);
             if (user == null)
@@ -56,7 +56,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<User>> AddUser(RegisterUserDTO rUser)
+        public async Task<ActionResult<User>> AddUser([FromBody] RegisterUserDTO rUser)
         {
             if (rUser == null)
             {
@@ -76,7 +76,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO uUser)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserDTO uUser)
         {
             if (uUser == null)
             {
@@ -93,7 +93,7 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
             await _service.DeleteUserAsync(id);
             return NoContent();
