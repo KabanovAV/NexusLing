@@ -2,7 +2,7 @@
 
 namespace NexusLing.Domain.Entities
 {
-    public class User : BaseAuditableEntity
+    public class User : AuditableEntityBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

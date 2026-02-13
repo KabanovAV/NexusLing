@@ -1,6 +1,6 @@
 ﻿namespace NexusLing.Domain.Common
 {
-    public class BaseEntity
+    public class EntityBase
     {
         public Guid Id { get; set; }
     }
