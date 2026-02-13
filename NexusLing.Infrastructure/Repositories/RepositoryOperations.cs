@@ -154,7 +154,7 @@ namespace NexusLing.Infrastructure.Repositories
         /// </summary>
         private void ApplieAuditable()
         {
-            var entities = Context.ChangeTracker.Entries<BaseAuditableEntity>()
+            var entities = Context.ChangeTracker.Entries<AuditableEntityBase>()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
 
             foreach (var entity in entities)
