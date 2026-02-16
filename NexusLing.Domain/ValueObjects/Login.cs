@@ -2,7 +2,7 @@
 
 namespace NexusLing.Domain.ValueObjects
 {
-    public sealed record Login
+    public sealed class Login : ValueObject
     {
         public const int MaxLength = 64;
 
@@ -26,5 +26,10 @@ namespace NexusLing.Domain.ValueObjects
         }
 
         public override string ToString() => Value;
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }

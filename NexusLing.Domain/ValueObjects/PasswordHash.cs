@@ -2,7 +2,7 @@
 
 namespace NexusLing.Domain.ValueObjects
 {
-    public sealed record PasswordHash
+    public sealed class PasswordHash : ValueObject
     {
         public const int MinLength = 8;
         public const int MaxLength = 128;
@@ -25,5 +25,9 @@ namespace NexusLing.Domain.ValueObjects
             return new(value);
         }
 
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }
