@@ -9,9 +9,12 @@ namespace NexusLing.Domain.ValueObjects
 
         public string Value { get; }
 
-        private PasswordHash() { }
-
         private PasswordHash(string value)
+        {
+            Value = value;
+        }
+
+        public static PasswordHash Create(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new DomainException("Пароль не может быть пустым.");
@@ -19,10 +22,8 @@ namespace NexusLing.Domain.ValueObjects
                 throw new DomainException($"Пароль должен содержать минимум {MinLength} символов.");
             if (value.Length > MaxLength)
                 throw new DomainException($"Пароль не может быть длиннее {MaxLength} символов.");
-            Value = value;
+            return new(value);
         }
 
-        public static PasswordHash Create(string value)
-            => new(value);
     }
 }

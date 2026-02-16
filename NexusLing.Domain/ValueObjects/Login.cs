@@ -8,9 +8,12 @@ namespace NexusLing.Domain.ValueObjects
 
         public string Value { get; }
 
-        private Login() { }
-
         private Login(string value)
+        {
+            Value = value;
+        }
+
+        public static Login Create(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new DomainException("Логин не может быть пустым.");
@@ -19,11 +22,8 @@ namespace NexusLing.Domain.ValueObjects
                 throw new DomainException($"Логин не может быть длиннее {MaxLength} символов.");
             if (normalized.Any(char.IsWhiteSpace))
                 throw new DomainException("Логин не может содержать пробелы.");
-            Value = value;
+            return new(value);
         }
-
-        public static Login Create(string value)
-            => new(value);
 
         public override string ToString() => Value;
     }
