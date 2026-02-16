@@ -62,10 +62,10 @@ namespace NexusLing.Application.Common.Mappings
         public static void UpdateDto(this User entity, UpdateUserDTO dto)
         {
             if (dto == null) return;
-            if (dto.FirstName != null && !string.IsNullOrEmpty(dto.FirstName) && entity.FirstName != dto.FirstName)
-                entity.FirstName = dto.FirstName;
-            if (dto.LastName != null && !string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
-                entity.LastName = dto.LastName;
+            if (!string.IsNullOrEmpty(dto.FirstName) && entity.FirstName != dto.FirstName)
+                entity.ChangeFirstName(dto.FirstName);
+            if (!string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
+                entity.ChangeLastName(dto.LastName);
             if (dto.Login != null && !string.IsNullOrEmpty(dto.Login) && entity.Login != dto.Login)
                 entity.Login = dto.Login;
             if (dto.Password != null && !string.IsNullOrEmpty(dto.Password) && entity.Password != dto.Password)
