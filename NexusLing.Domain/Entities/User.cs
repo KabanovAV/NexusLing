@@ -45,5 +45,11 @@ namespace NexusLing.Domain.Entities
                 throw new DomainException("Фамилия не может быть пустым.");
             LastName = lastName;
         }
+
+        public void ChangeLogin(Login login)
+            => Login = login ?? throw new DomainException("Логин не может быть пустым.");
+
+        public void ChangePassword(PasswordHash passwordHash)
+            => PasswordHash = passwordHash ?? throw new DomainException("Пароль не может быть пустым.");
     }
 }

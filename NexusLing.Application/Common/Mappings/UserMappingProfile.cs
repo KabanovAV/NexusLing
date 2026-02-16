@@ -52,7 +52,7 @@ namespace NexusLing.Application.Common.Mappings
         /// <param name="entities">Список User</param>
         /// <returns>Возвращает список UpdateUserDTO</returns>
         public static List<UpdateUserDTO> ToUpdateDto(this IEnumerable<User> entities)
-            => [.. entities.Where(e => e != null).Select(e => e.ToUpdateDto())];        
+            => [.. entities.Where(e => e != null).Select(e => e.ToUpdateDto())];
 
         /// <summary>
         /// Маппинг обновления обьекта User
@@ -66,10 +66,10 @@ namespace NexusLing.Application.Common.Mappings
                 entity.ChangeFirstName(dto.FirstName);
             if (!string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
                 entity.ChangeLastName(dto.LastName);
-            if (dto.Login != null && !string.IsNullOrEmpty(dto.Login) && entity.Login != dto.Login)
-                entity.Login = dto.Login;
-            if (dto.Password != null && !string.IsNullOrEmpty(dto.Password) && entity.Password != dto.Password)
-                entity.Password = dto.Password;
+            if (!string.IsNullOrEmpty(dto.Login) && entity.Login.Value != dto.Login)
+                entity.ChangeLogin(Login.Create(dto.Login));
+            if (!string.IsNullOrEmpty(dto.Password) && entity.PasswordHash.Value != dto.Password)
+                entity.ChangePassword(PasswordHash.Create(dto.Password));
         }
     }
 }
