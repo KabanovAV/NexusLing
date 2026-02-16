@@ -12,6 +12,24 @@ namespace NexusLing.Domain.Entities
 
         private User() { }
 
-        private
+        private User(string firstName, string lastName, Login login, PasswordHash passwordHash)
+        {
+            SetName(firstName, lastName);
+            Login = login ?? throw new DomainException("Логин не может быть пустым.");
+            PasswordHash = passwordHash ?? throw new DomainException("Пароль не может быть пустым."); ;
+        }
+
+        public static User Create(string firstName, string lastName, Login login, PasswordHash passwordHash)
+            => new(firstName, lastName, login, passwordHash);
+
+        public void SetName(string firstName, string lastName)
+        {
+            if (string.IsNullOrWhiteSpace(firstName))
+                throw new DomainException("Имя не может быть пустым.");
+            if (string.IsNullOrWhiteSpace(lastName))
+                throw new DomainException("Фамилия не может быть пустым.");
+            FirstName = firstName;
+            LastName = lastName;
+        }
     }
 }
