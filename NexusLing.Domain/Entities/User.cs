@@ -10,7 +10,7 @@ namespace NexusLing.Domain.Entities
         public Login Login { get; private set; }
         public PasswordHash PasswordHash { get; private set; }
 
-        private User() { }
+        public User() { }
 
         private User(string firstName, string lastName, Login login, PasswordHash passwordHash)
         {
