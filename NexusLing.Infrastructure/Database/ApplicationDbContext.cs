@@ -14,6 +14,7 @@ namespace NexusLing.Infrastructure.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(EntityBase).IsAssignableFrom(entityType.ClrType))
