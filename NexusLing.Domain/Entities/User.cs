@@ -33,7 +33,7 @@ namespace NexusLing.Domain.Entities
         public static User Create(string firstName, string lastName, Login login, PasswordHash passwordHash)
             => new(firstName, lastName, login, passwordHash);
 
-        public void ApplyUpdate(string firstName, string lastName, string login, string password)
+        public void ApplyUpdate(string firstName, string lastName, string login)
         {
             if (firstName != FirstName)
                 FirstName = firstName;
@@ -41,8 +41,6 @@ namespace NexusLing.Domain.Entities
                 LastName = lastName;
             if (login != Login.Value)
                 Login = Login.Create(login);
-            if (password != PasswordHash.Value)
-                PasswordHash = PasswordHash.Create(password);
         }
     }
 }
