@@ -10,8 +10,8 @@ namespace NexusLing.Application.Common.Mappings
         /// </summary>
         /// <param name="entity">Обьект User</param>
         /// <returns>Возвращает UserDTO</returns>
-        public static UserDTO? ToDto(this User entity)
-            => entity == null ? null : new(entity.Id, entity.FirstName, entity.LastName, entity.Login.Value);
+        public static UserDTO ToDto(this User entity)
+            => new(entity.Id, entity.FirstName, entity.LastName, entity.Login.Value);
 
         /// <summary>
         /// Маппинг списка из обьектов User в список UserDTO
