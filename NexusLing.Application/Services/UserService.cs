@@ -63,7 +63,7 @@ namespace NexusLing.Application.Services
         public async Task UpdateUserAsync(Guid id, UpdateUserDTO uUser)
         {
             var user = await _repository.UserRepository.GetUserAsync(id);
-            user.UpdateDto(uUser);
+            user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login, uUser.Password);
             await _repository.UserRepository.Update(user);
         }
 

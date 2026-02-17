@@ -20,9 +20,6 @@ namespace NexusLing.Domain.Entities
             PasswordHash = passwordHash ?? throw new DomainException("Пароль не может быть пустым."); ;
         }
 
-        public static User Create(string firstName, string lastName, Login login, PasswordHash passwordHash)
-            => new(firstName, lastName, login, passwordHash);
-
         public void SetFullName(string firstName, string lastName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
@@ -31,6 +28,21 @@ namespace NexusLing.Domain.Entities
                 throw new DomainException("Фамилия не может быть пустым.");
             FirstName = firstName;
             LastName = lastName;
+        }
+
+        public static User Create(string firstName, string lastName, Login login, PasswordHash passwordHash)
+            => new(firstName, lastName, login, passwordHash);
+
+        public void ApplyUpdate(string firstName, string lastName, string login, string password)
+        {
+            if (firstName != FirstName)
+                FirstName = firstName;
+            if (lastName != LastName)
+                LastName = lastName;
+            if (login != Login.Value)
+                Login = Login.Create(login);
+            if (password != PasswordHash.Value)
+                PasswordHash = PasswordHash.Create(password);
         }
     }
 }
