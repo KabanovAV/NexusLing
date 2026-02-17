@@ -1,6 +1,5 @@
 ﻿using NexusLing.Application.DTOs;
 using NexusLing.Domain.Entities;
-using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Common.Mappings
 {
@@ -21,55 +20,5 @@ namespace NexusLing.Application.Common.Mappings
         /// <returns>Возвращает список UserDTO</returns>
         public static List<UserDTO> ToDto(this IEnumerable<User> entities)
             => [.. entities.Where(e => e != null).Select(e => e.ToDto())];
-
-        /// <summary>
-        /// Маппинг из обьекта RegisterUserDTO в User
-        /// </summary>
-        /// <param name="rDto">Обьект RegisterUserDTO</param>
-        /// <returns>Возвращает User</returns>
-        public static User? ToEntity(this RegisterUserDTO rDto)
-            => rDto == null ? null : User.Create(rDto.FirstName, rDto.LastName, Login.Create(rDto.Login), PasswordHash.Create(rDto.Password));
-
-        /// <summary>
-        /// Маппинг списка из обьектов RegisterUserDTO в список User
-        /// </summary>
-        /// <param name="rDtos">Список RegisterUserDTO</param>
-        /// <returns>Возвращает список User</returns>
-        public static List<User> ToEntity(this IEnumerable<RegisterUserDTO> rDtos)
-            => [.. rDtos.Where(rDto => rDto != null).Select(rDto => rDto.ToEntity())];
-
-        /// <summary>
-        /// Маппинг из обьекта User в UpdateUserDTO
-        /// </summary>
-        /// <param name="entity">Обьект User</param>
-        /// <returns>Возвращает UpdateUserDTO</returns>
-        public static UpdateUserDTO? ToUpdateDto(this User entity)
-            => entity == null ? null : new(entity.Id, entity.FirstName, entity.LastName, entity.Login.Value, entity.PasswordHash.Value);
-
-        /// <summary>
-        /// Маппинг списка из обьектов User в список UpdateUserDTO
-        /// </summary>
-        /// <param name="entities">Список User</param>
-        /// <returns>Возвращает список UpdateUserDTO</returns>
-        public static List<UpdateUserDTO> ToUpdateDto(this IEnumerable<User> entities)
-            => [.. entities.Where(e => e != null).Select(e => e.ToUpdateDto())];
-
-        /// <summary>
-        /// Маппинг обновления обьекта User
-        /// </summary>
-        /// <param name="entity">Обьект User</param>
-        /// <param name="dto">Обьект UpdateUserDTO</param>
-        public static void UpdateDto(this User entity, UpdateUserDTO dto)
-        {
-            if (dto == null) return;
-            if (!string.IsNullOrEmpty(dto.FirstName) && entity.FirstName != dto.FirstName)
-                entity.SetFirstName(dto.FirstName);
-            if (!string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
-                entity.SetLastName(dto.LastName);
-            if (!string.IsNullOrEmpty(dto.Login) && entity.Login.Value != dto.Login)
-                entity.SetLogin(Login.Create(dto.Login));
-            if (!string.IsNullOrEmpty(dto.Password) && entity.PasswordHash.Value != dto.Password)
-                entity.SetPassword(PasswordHash.Create(dto.Password));
-        }
     }
 }
