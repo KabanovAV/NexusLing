@@ -6,7 +6,7 @@ namespace NexusLing.Domain.ValueObjects
     public sealed class PasswordHash : ValueObject
     {
         public const int MinLength = 8;
-        public const int MaxLength = 128;
+        public const int MaxLength = 64;
 
         public string Value { get; }
 
