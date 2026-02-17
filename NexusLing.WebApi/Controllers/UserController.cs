@@ -39,15 +39,8 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<User>> GetUser([FromRoute] Guid userId)
         {
-            try
-            {
-                var user = await _service.GetUserAsync(userId);
-                return Ok(user);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new { ex.Message });
-            }
+            var user = await _service.GetUserAsync(userId);
+            return Ok(user);
         }
 
         /// <summary>
