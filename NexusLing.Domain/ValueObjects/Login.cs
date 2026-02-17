@@ -23,7 +23,7 @@ namespace NexusLing.Domain.ValueObjects
                 throw new DomainException($"Логин не может быть длиннее {MaxLength} символов.");
             if (normalized.Any(char.IsWhiteSpace))
                 throw new DomainException("Логин не может содержать пробелы.");
-            return new(value);
+            return new(normalized);
         }
 
         public override string ToString() => Value;
