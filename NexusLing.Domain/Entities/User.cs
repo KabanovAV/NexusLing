@@ -32,25 +32,5 @@ namespace NexusLing.Domain.Entities
             FirstName = firstName;
             LastName = lastName;
         }
-
-        public void SetFirstName(string firstName)
-        {
-            if (string.IsNullOrWhiteSpace(firstName))
-                throw new DomainException("Имя не может быть пустым.");
-            FirstName = firstName;
-        }
-
-        public void SetLastName(string lastName)
-        {
-            if (string.IsNullOrWhiteSpace(lastName))
-                throw new DomainException("Фамилия не может быть пустым.");
-            LastName = lastName;
-        }
-
-        public void SetLogin(Login login)
-            => Login = login ?? throw new DomainException("Логин не может быть пустым.");
-
-        public void SetPassword(PasswordHash passwordHash)
-            => PasswordHash = passwordHash ?? throw new DomainException("Пароль не может быть пустым.");
     }
 }
