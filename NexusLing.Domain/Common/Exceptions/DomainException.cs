@@ -1,4 +1,4 @@
-﻿namespace NexusLing.Domain.Common
+﻿namespace NexusLing.Domain.Exceptions
 {
     public class DomainException : Exception
     {
