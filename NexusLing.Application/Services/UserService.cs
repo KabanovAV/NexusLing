@@ -2,6 +2,7 @@
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
+using NexusLing.Domain.Exceptions;
 
 namespace NexusLing.Application.Services
 {
@@ -34,6 +35,8 @@ namespace NexusLing.Application.Services
         public async Task<UserDTO> GetUserAsync(Guid id)
         {
             var user = await _repository.UserRepository.GetUserAsync(id);
+            if (user == null)
+                throw new NotFoundException("User", id);
             return user.ToDto();
         }
 

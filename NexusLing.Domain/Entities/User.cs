@@ -1,4 +1,5 @@
 ﻿using NexusLing.Domain.Common;
+using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Domain.Entities

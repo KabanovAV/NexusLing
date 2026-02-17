@@ -2,6 +2,7 @@
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Entities;
+using NexusLing.Domain.Exceptions;
 
 namespace NexusLing.WebApi.Controllers
 {
@@ -38,12 +39,15 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<User>> GetUser([FromRoute] Guid userId)
         {
-            var user = await _service.GetUserAsync(userId);
-            if (user == null)
+            try
             {
-                return NotFound(new { Message = $"Пользователь с id {userId} не найден." });
+                var user = await _service.GetUserAsync(userId);
+                return Ok(user);
             }
-            return Ok(user);
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
+            }
         }
 
         /// <summary>
