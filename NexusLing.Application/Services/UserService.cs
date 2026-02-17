@@ -3,6 +3,7 @@ using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.Exceptions;
+using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Services
 {
@@ -12,10 +13,12 @@ namespace NexusLing.Application.Services
     public class UserService : IUserService
     {
         private readonly IRepository _repository;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserService(IRepository repository)
+        public UserService(IRepository repository, IPasswordHasher passwordHasher)
         {
             _repository = repository;
+            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -48,6 +51,7 @@ namespace NexusLing.Application.Services
         public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
         {
             var user = rUser.ToEntity();
+            user.SetPassword(PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
             await _repository.UserRepository.AddAsync(user);
             return user.ToDto();
         }

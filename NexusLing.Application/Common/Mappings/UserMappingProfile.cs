@@ -63,13 +63,13 @@ namespace NexusLing.Application.Common.Mappings
         {
             if (dto == null) return;
             if (!string.IsNullOrEmpty(dto.FirstName) && entity.FirstName != dto.FirstName)
-                entity.ChangeFirstName(dto.FirstName);
+                entity.SetFirstName(dto.FirstName);
             if (!string.IsNullOrEmpty(dto.LastName) && entity.LastName != dto.LastName)
-                entity.ChangeLastName(dto.LastName);
+                entity.SetLastName(dto.LastName);
             if (!string.IsNullOrEmpty(dto.Login) && entity.Login.Value != dto.Login)
-                entity.ChangeLogin(Login.Create(dto.Login));
+                entity.SetLogin(Login.Create(dto.Login));
             if (!string.IsNullOrEmpty(dto.Password) && entity.PasswordHash.Value != dto.Password)
-                entity.ChangePassword(PasswordHash.Create(dto.Password));
+                entity.SetPassword(PasswordHash.Create(dto.Password));
         }
     }
 }

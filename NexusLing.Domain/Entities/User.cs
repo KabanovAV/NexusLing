@@ -33,24 +33,24 @@ namespace NexusLing.Domain.Entities
             LastName = lastName;
         }
 
-        public void ChangeFirstName(string firstName)
+        public void SetFirstName(string firstName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
                 throw new DomainException("Имя не может быть пустым.");
             FirstName = firstName;
         }
 
-        public void ChangeLastName(string lastName)
+        public void SetLastName(string lastName)
         {
             if (string.IsNullOrWhiteSpace(lastName))
                 throw new DomainException("Фамилия не может быть пустым.");
             LastName = lastName;
         }
 
-        public void ChangeLogin(Login login)
+        public void SetLogin(Login login)
             => Login = login ?? throw new DomainException("Логин не может быть пустым.");
 
-        public void ChangePassword(PasswordHash passwordHash)
+        public void SetPassword(PasswordHash passwordHash)
             => PasswordHash = passwordHash ?? throw new DomainException("Пароль не может быть пустым.");
     }
 }
