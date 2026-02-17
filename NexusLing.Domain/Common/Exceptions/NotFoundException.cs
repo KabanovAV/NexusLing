@@ -2,7 +2,7 @@
 {
     internal class NotFoundException : DomainException
     {
-        public NotFoundException(string message)
-            : base(message) { }
+        public NotFoundException(string entityName, object id)
+            : base($"Сущность '{entityName}' с Id '{id}' не найдена") { }
     }
 }
