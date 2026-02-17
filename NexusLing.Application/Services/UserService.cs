@@ -4,6 +4,7 @@ using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.ValueObjects;
+using NexusLing.Domain.Entities;
 
 namespace NexusLing.Application.Services
 {
@@ -50,8 +51,7 @@ namespace NexusLing.Application.Services
         /// <returns>Объект после добавления в БД</returns>
         public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
         {
-            var user = rUser.ToEntity();
-            user.SetPassword(PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
+            var user = User.Create(rUser.FirstName, rUser.LastName, Login.Create(rUser.Login), PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
             await _repository.UserRepository.AddAsync(user);
             return user.ToDto();
         }
