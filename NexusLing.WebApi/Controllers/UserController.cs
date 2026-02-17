@@ -2,7 +2,6 @@
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Entities;
-using NexusLing.Domain.Exceptions;
 
 namespace NexusLing.WebApi.Controllers
 {
@@ -48,10 +47,10 @@ namespace NexusLing.WebApi.Controllers
         /// </summary>
         /// <param name="rUser">Пользователь</param>
         /// <returns>Возвращает нового пользователя</returns>
-        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="201">Успешное выполнение запроса</response>
         /// <response code="400">Пустой обьект пользователя</response>
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<User>> AddUser([FromBody] RegisterUserDTO rUser)
         {
@@ -60,7 +59,7 @@ namespace NexusLing.WebApi.Controllers
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
             }
             var user = await _service.AddUserAsync(rUser);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user);
         }
 
         /// <summary>
