@@ -69,11 +69,11 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="userId">Id пользователя</param>
         /// <param name="uUser">Измененные данные пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
-        /// <response code="404">Пользователь не найден</response>
-        /// <response code="404">Id не совпадают</response>
+        /// <response code="400">Пустые данные</response>
+        /// <response code="400">Id не совпадают</response>
         [HttpPut("{userId:guid}")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
             if (uUser == null)
