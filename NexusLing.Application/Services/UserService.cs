@@ -64,6 +64,8 @@ namespace NexusLing.Application.Services
         {
             var user = await _repository.UserRepository.GetUserAsync(id);
             user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login);
+            if (!_passwordHasher.Verify(uUser.Password, user.PasswordHash.Value))
+                user.ChangePassword(uUser.Password);
             await _repository.UserRepository.Update(user);
         }
 

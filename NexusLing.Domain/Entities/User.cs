@@ -42,5 +42,8 @@ namespace NexusLing.Domain.Entities
             if (login != Login.Value)
                 Login = Login.Create(login);
         }
+
+        public void ChangePassword(string newPassword)
+            => PasswordHash = PasswordHash.Create(newPassword);
     }
 }
