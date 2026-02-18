@@ -11,8 +11,8 @@ namespace NexusLing.WebApi
         {
             services.AddControllers();
             services.AddSwagger();
-            services.AddInfrastructure(configuration);
             services.AddApplication();
+            services.AddInfrastructure(configuration);
             return services;
         }
 

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
+using NexusLing.Infrastructure.Authentications;
 using NexusLing.Infrastructure.Database;
 using NexusLing.Infrastructure.Repositories;
 
@@ -11,7 +13,8 @@ namespace NexusLing.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
             => services.AddDatabase(configuration)
-                .AddRepository();
+                .AddRepository()
+                .AddPasswordHasher();
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
@@ -23,5 +26,8 @@ namespace NexusLing.Infrastructure
 
         public static IServiceCollection AddRepository(this IServiceCollection services)
             => services.AddScoped<IRepository, Repository>();
+
+        public static IServiceCollection AddPasswordHasher(this IServiceCollection services)
+            => services.AddScoped<IPasswordHasher, PasswordHasher>();
     }
 }
