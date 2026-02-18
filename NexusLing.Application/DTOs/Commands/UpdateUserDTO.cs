@@ -1,13 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NexusLing.Application.Bases;
 
 namespace NexusLing.Application.DTOs
 {
-    public record UpdateUserDTO()
-    {
-        public Guid Id { get; init; }
-        public string? FirstName { get; init; }
-        public string? LastName { get; init; }
-        public string? Login { get; init; }
-        public string? Password { get; init; }
-    };
+    public record UpdateUserDTO(Guid Id, string FirstName, string LastName, string Login, string Password)
+        : UserBaseDTO(FirstName, LastName, Login);
 }

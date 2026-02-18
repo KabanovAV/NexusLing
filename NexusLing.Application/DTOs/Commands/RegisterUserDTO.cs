@@ -1,13 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NexusLing.Application.Bases;
 
 namespace NexusLing.Application.DTOs
 {
-    public record RegisterUserDTO()
-    {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string Login { get; init; }
-        public string Password { get; init; }
-        public string ConfirmPassword { get; init; }
-    };
+    public record RegisterUserDTO(string FirstName, string LastName, string Login, string Password, string ConfirmPassword)
+        : UserBaseDTO(FirstName, LastName, Login);
 }
