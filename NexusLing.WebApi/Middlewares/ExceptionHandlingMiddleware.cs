@@ -1,5 +1,6 @@
 ﻿using NexusLing.Application.Common.Exceptions;
 using NexusLing.Domain.Exceptions;
+using System.Text.Json;
 
 namespace NexusLing.WebApi.Middlewares
 {
@@ -21,17 +22,27 @@ namespace NexusLing.WebApi.Middlewares
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
-                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+                await context.Response.WriteAsJsonAsync(new { message = ex.Message });
             }
             catch (DomainException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+                await context.Response.WriteAsJsonAsync(new { message = ex.Message });
             }
             catch (ValidatorException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+                context.Response.ContentType = "application/json";
+
+                var response = new
+                {
+                    status = 400,
+                    title = "Ошибка валидации",
+                    message = ex.Message,
+                    errors = ex.Errors
+                };
+
+                await context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(response));
             }
         }
     }
