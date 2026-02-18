@@ -23,7 +23,7 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUser()
             => Ok(await _service.GetAllUserAsync());
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpGet("{userId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<User>> GetUser([FromRoute] Guid userId)
+        public async Task<ActionResult<UserDTO>> GetUser([FromRoute] Guid userId)
         {
             var user = await _service.GetUserAsync(userId);
             return Ok(user);
@@ -52,7 +52,7 @@ namespace NexusLing.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<User>> AddUser([FromBody] RegisterUserDTO rUser)
+        public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
         {
             if (rUser == null)
             {
@@ -75,6 +75,9 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (uUser == null)
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
