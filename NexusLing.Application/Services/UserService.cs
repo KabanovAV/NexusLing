@@ -4,10 +4,12 @@ using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 using NexusLing.Application.Validators;
+using NexusLing.Domain.Common.Exceptions;
 using NexusLing.Domain.Entities;
 using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.ValueObjects;
+using System.Data;
 
 namespace NexusLing.Application.Services
 {
@@ -84,6 +86,8 @@ namespace NexusLing.Application.Services
                     .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
                 throw new ValidatorException(errorResponse);
             }
+            if (id != uUser.Id)
+                throw new IdNotEqualException(id, uUser.Id);
 
             var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
             user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login);
