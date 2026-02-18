@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
+using NexusLing.Application.Validators;
 using NexusLing.Domain.Entities;
 
 namespace NexusLing.WebApi.Controllers
@@ -54,6 +55,19 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
         {
+            var validator = new RegisterUserValidator();
+            var validationResult = validator.Validate(rUser);
+
+            if (!validationResult.IsValid)
+            {
+                var errorResponse = validationResult.Errors.Select(e => new
+                {
+                    Field = e.PropertyName,
+                    Error = e.ErrorMessage
+                });
+                return BadRequest(new { Errors = errorResponse });
+            }
+
             if (rUser == null)
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
@@ -75,9 +89,6 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             if (uUser == null)
             {
                 return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
