@@ -1,4 +1,5 @@
-﻿using NexusLing.Application.Common.Exceptions;
+﻿using FluentValidation;
+using NexusLing.Application.Common.Exceptions;
 using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
@@ -41,9 +42,7 @@ namespace NexusLing.Application.Services
         public async Task<UserDTO> GetUserAsync(Guid id)
         {
             var user = await _repository.UserRepository.GetUserAsync(id);
-            if (user == null)
-                throw new NotFoundException("User", id);
-            return user.ToDto();
+            return user == null ? throw new NotFoundException("User", id) : user.ToDto();
         }
 
         /// <summary>
@@ -75,7 +74,18 @@ namespace NexusLing.Application.Services
         /// <param name="uUser">Изменяемый пользователь</param>
         public async Task UpdateUserAsync(Guid id, UpdateUserDTO uUser)
         {
-            var user = await _repository.UserRepository.GetUserAsync(id);
+            var validator = new UpdateUserValidator();
+            var validatorResult = await validator.ValidateAsync(uUser);
+
+            if (!validatorResult.IsValid)
+            {
+                var errorResponse = validatorResult.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+                throw new ValidatorException(errorResponse);
+            }
+
+            var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
             user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login);
             if (!_passwordHasher.Verify(uUser.Password, user.PasswordHash.Value))
                 user.ChangePassword(uUser.Password);
