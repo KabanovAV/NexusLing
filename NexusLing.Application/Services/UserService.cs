@@ -1,10 +1,12 @@
-﻿using NexusLing.Application.Common.Mappings;
+﻿using NexusLing.Application.Common.Exceptions;
+using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
-using NexusLing.Domain.Interfaces;
-using NexusLing.Domain.Exceptions;
-using NexusLing.Domain.ValueObjects;
+using NexusLing.Application.Validators;
 using NexusLing.Domain.Entities;
+using NexusLing.Domain.Exceptions;
+using NexusLing.Domain.Interfaces;
+using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Services
 {
@@ -51,6 +53,17 @@ namespace NexusLing.Application.Services
         /// <returns>Объект после добавления в БД</returns>
         public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
         {
+            var validator = new RegisterUserValidator();
+            var validatorResult = await validator.ValidateAsync(rUser);
+
+            if (!validatorResult.IsValid)
+            {
+                var errorResponse = validatorResult.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+                throw new ValidatorException(errorResponse);
+            }                
+
             var user = User.Create(rUser.FirstName, rUser.LastName, Login.Create(rUser.Login), PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
             await _repository.UserRepository.AddAsync(user);
             return user.ToDto();
