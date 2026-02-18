@@ -1,4 +1,5 @@
-﻿using NexusLing.Domain.Exceptions;
+﻿using NexusLing.Application.Common.Exceptions;
+using NexusLing.Domain.Exceptions;
 
 namespace NexusLing.WebApi.Middlewares
 {
@@ -26,7 +27,12 @@ namespace NexusLing.WebApi.Middlewares
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-            }            
+            }
+            catch (ValidatorException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
         }
     }
 }

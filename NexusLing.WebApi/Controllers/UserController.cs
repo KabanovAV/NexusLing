@@ -55,23 +55,6 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
         {
-            var validator = new RegisterUserValidator();
-            var validationResult = validator.Validate(rUser);
-
-            if (!validationResult.IsValid)
-            {
-                var errorResponse = validationResult.Errors.Select(e => new
-                {
-                    Field = e.PropertyName,
-                    Error = e.ErrorMessage
-                });
-                return BadRequest(new { Errors = errorResponse });
-            }
-
-            if (rUser == null)
-            {
-                return BadRequest(new { Message = "Данные для добавления пользователя пустые." });
-            }
             var user = await _service.AddUserAsync(rUser);
             return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user);
         }
