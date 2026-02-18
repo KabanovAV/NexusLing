@@ -72,10 +72,6 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
-            if (userId != uUser.Id)
-            {
-                return BadRequest(new { Message = "ID в URL и ID в теле запроса не совпадаю." });
-            }
             await _service.UpdateUserAsync(userId, uUser);
             return NoContent();
         }

@@ -1,4 +1,5 @@
 ﻿using NexusLing.Application.Common.Exceptions;
+using NexusLing.Domain.Common.Exceptions;
 using NexusLing.Domain.Exceptions;
 using Serilog;
 
@@ -21,7 +22,7 @@ namespace NexusLing.WebApi.Middlewares
             }
             catch (NotFoundException ex)
             {
-                Log.Warning(ex, "Ресурс не найден: {Path}", context.Request.Path);
+                Log.Warning(ex, "Ресурс не найден: {Path} метод {Method}", context.Request.Path, context.Request.Method);
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
                 await context.Response.WriteAsJsonAsync(new
                 {
@@ -31,14 +32,14 @@ namespace NexusLing.WebApi.Middlewares
                     path = context.Request.Path
                 });
             }
-            catch (DomainException ex)
+            catch (IdNotEqualException ex)
             {
-                Log.Warning(ex, "Ошибка домена: {Path}", context.Request.Path);
+                Log.Warning(ex, "Id ресурсов не совпадают: {Path} метод {Method}", context.Request.Path, context.Request.Method);
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsJsonAsync(new
                 {
                     status = 400,
-                    title = "Ошибка бизнес-логики",
+                    title = "Ресурсы не совпадают",
                     message = ex.Message,
                     path = context.Request.Path
                 });
@@ -53,6 +54,31 @@ namespace NexusLing.WebApi.Middlewares
                     title = "Ошибка валидации",
                     message = ex.Message,
                     errors = ex.Errors,
+                    path = context.Request.Path
+                });
+            }
+            catch (DomainException ex)
+            {
+                Log.Warning(ex, "Ошибка домена: {Path} метод {Method}", context.Request.Path, context.Request.Method);
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    status = 400,
+                    title = "Ошибка бизнес-логики",
+                    message = ex.Message,
+                    path = context.Request.Path
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Необработанная ошибка: {Path} метод {Method}", context.Request.Path, context.Request.Method);
+
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    status = 500,
+                    title = "Внутренняя ошибка сервера",
+                    message = "Произошла внутренняя ошибка. Пожалуйста, попробуйте позже.",
                     path = context.Request.Path
                 });
             }
