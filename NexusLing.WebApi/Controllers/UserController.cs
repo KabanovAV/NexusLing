@@ -67,12 +67,29 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Пустые данные</response>
         /// <response code="400">Id не совпадают</response>
-        [HttpPut("{userId:guid}")]
+        [HttpPatch("{userId:guid}/profile")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
             await _service.UpdateUserAsync(userId, uUser);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Обновление пароля пользователя
+        /// </summary>
+        /// <param name="userId">Id пользователя</param>
+        /// <param name="uPassword">Новый пароль пользователя</param>
+        /// <response code="204">Успешное выполнение запроса</response>
+        /// <response code="400">Пустые данные</response>
+        /// <response code="400">Id не совпадают</response>
+        [HttpPatch("{userId:guid}/password")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> UpdatePassword([FromRoute] Guid userId, [FromBody] ChangePasswordDTO uPassword)
+        {
+            await _service.UpdatePasswordAsync(userId, uPassword);
             return NoContent();
         }
 
