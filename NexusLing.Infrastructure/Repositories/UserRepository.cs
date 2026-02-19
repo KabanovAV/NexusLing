@@ -23,8 +23,17 @@ namespace NexusLing.Infrastructure.Repositories
         /// <summary>
         /// Получение одного пользователя из набора данных
         /// </summary>
+        /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
         public async Task<User> GetUserAsync(Guid id)
             => await GetAsync(id);
+
+        /// <summary>
+        /// Проверка логина на существование в базе
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает true если пользователь с таким логином существует, false не существует</returns>
+        public async Task<bool> LoginExistsAsync(string login)
+            => await PlainData.AnyAsync(u => u.Login.Value == login);
     }
 }
