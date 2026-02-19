@@ -3,7 +3,6 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using NexusLing.Application.Common.Exceptions;
 using NexusLing.Application.Common.Interfaces;
-using NexusLing.Application.Validators;
 
 namespace NexusLing.Application.Services
 {
