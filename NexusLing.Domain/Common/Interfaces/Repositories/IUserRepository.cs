@@ -12,10 +12,19 @@ namespace NexusLing.Domain.Interfaces
         /// </summary>
         /// <returns>Возвращает список всех пользователей из набора данных</returns>
         Task<IEnumerable<User>> GetAllUserAsync();
+
         /// <summary>
         /// Получение одного пользователя из набора данных
         /// </summary>
+        /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
         Task<User> GetUserAsync(Guid id);
+
+        /// <summary>
+        /// Проверка логина на существование в базе
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает true если пользователь с таким логином существует, false не существует</returns>
+        Task<bool> LoginExistsAsync(string login);
     }
 }
