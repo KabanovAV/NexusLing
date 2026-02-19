@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 
 namespace NexusLing.Infrastructure.Authentications
 {
+    /// <summary>
+    /// Интерфейс сервиса хэширования пароля
+    /// </summary>
     public class PasswordHasher : IPasswordHasher
     {
         private const int SaltSize = 16;
@@ -11,6 +14,11 @@ namespace NexusLing.Infrastructure.Authentications
 
         private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA512;
 
+        /// <summary>
+        /// Хэширование пароля
+        /// </summary>
+        /// <param name="password">Пароль</param>
+        /// <returns>Возвращает хэшированный пароль</returns>
         public string Hash(string password)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
@@ -18,6 +26,12 @@ namespace NexusLing.Infrastructure.Authentications
             return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
         }
 
+        /// <summary>
+        /// Верификаци пароля
+        /// </summary>
+        /// <param name="password">Пароль</param>
+        /// <param name="passwordHash">Хэшированный пароль</param>
+        /// <returns>Возвращает true если пароль прошел верификацию, false не прошел</returns>
         public bool Verify(string password, string passwordHash)
         {
             string[] parts = passwordHash.Split('-');

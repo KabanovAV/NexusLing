@@ -6,6 +6,9 @@ using NexusLing.Application.Common.Interfaces;
 
 namespace NexusLing.Application.Services
 {
+    /// <summary>
+    /// Сервис с операциями для валидации объектов
+    /// </summary>
     public class ValidationService : IValidationService
     {
         private readonly IServiceProvider _serviceProvider;
@@ -15,6 +18,11 @@ namespace NexusLing.Application.Services
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Валидирует объект и выбрасывает исключение при ошибках
+        /// </summary>  
+        /// <typeparam name="T">Тип обьекта</typeparam>
+        /// <param name="instance">Обьект валидации</param>
         public async Task ValidateAndThrowAsync<T>(T instance)
         {
             var validator = _serviceProvider.GetService<IValidator<T>>();
@@ -31,6 +39,11 @@ namespace NexusLing.Application.Services
             }
         }
 
+        /// <summary>
+        /// Валидирует объект и возвращает результат
+        /// </summary>
+        /// <typeparam name="T">Тип обьекта</typeparam>
+        /// <param name="instance">Обьект валидации</param>
         public async Task<ValidationResult> ValidateAsync<T>(T instance)
         {
             var validator = _serviceProvider.GetService<IValidator<T>>();

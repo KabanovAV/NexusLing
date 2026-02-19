@@ -12,23 +12,27 @@ namespace NexusLing.Application.Interfaces
         /// </summary>
         /// <returns>Возвращает список всех пользователей из набора данных</returns>
         Task<IEnumerable<UserDTO>> GetAllUserAsync();
+
         /// <summary>
         /// Получение одного пользователя из набора данных
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
         Task<UserDTO> GetUserAsync(Guid id);
+
         /// <summary>
         /// Добавить одиного пользователя в набор данных
         /// </summary>
         /// <param name="user">Добавляемый пользователь</param>
         /// <returns>Объект после добавления в БД</returns>
         Task<UserDTO> AddUserAsync(RegisterUserDTO rUser);
+
         /// <summary>
         /// Изменить одиного пользователя в наборе данных
         /// </summary>
         /// <param name="user">Изменяемый пользователь</param>
         Task UpdateUserAsync(Guid id, UpdateUserDTO uUser);
+
         /// <summary>
         /// Удалить одоного пользователя из набора данных
         /// </summary>

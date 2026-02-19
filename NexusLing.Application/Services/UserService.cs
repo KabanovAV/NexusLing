@@ -1,17 +1,12 @@
-﻿using FluentValidation;
-using NexusLing.Application.Common.Exceptions;
-using NexusLing.Application.Common.Interfaces;
+﻿using NexusLing.Application.Common.Interfaces;
 using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
-using NexusLing.Application.Validators;
 using NexusLing.Domain.Common.Exceptions;
 using NexusLing.Domain.Entities;
 using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.ValueObjects;
-using System.Data;
-using System.Text;
 
 namespace NexusLing.Application.Services
 {
