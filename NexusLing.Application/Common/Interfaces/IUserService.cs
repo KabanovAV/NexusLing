@@ -23,15 +23,21 @@ namespace NexusLing.Application.Interfaces
         /// <summary>
         /// Добавить одиного пользователя в набор данных
         /// </summary>
-        /// <param name="user">Добавляемый пользователь</param>
+        /// <param name="rUser">Добавляемый пользователь</param>
         /// <returns>Объект после добавления в БД</returns>
         Task<UserDTO> AddUserAsync(RegisterUserDTO rUser);
 
         /// <summary>
         /// Изменить одиного пользователя в наборе данных
         /// </summary>
-        /// <param name="user">Изменяемый пользователь</param>
+        /// <param name="uUser">Изменяемый пользователь</param>
         Task UpdateUserAsync(Guid id, UpdateUserDTO uUser);
+
+        /// <summary>
+        /// Изменить пароль пользователя
+        /// </summary>
+        /// <param name="uPassword">Новый пароль пользователя</param>
+        Task UpdatePasswordAsync(Guid id, ChangePasswordDTO uPassword);
 
         /// <summary>
         /// Удалить одоного пользователя из набора данных
