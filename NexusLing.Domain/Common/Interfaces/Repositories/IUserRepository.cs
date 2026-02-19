@@ -21,10 +21,10 @@ namespace NexusLing.Domain.Interfaces
         Task<User> GetUserAsync(Guid id);
 
         /// <summary>
-        /// Проверка логина на существование в базе
+        /// Получение пользователя по логину
         /// </summary>
         /// <param name="login">Логин пользователя</param>
-        /// <returns>Возвращает true если пользователь с таким логином существует, false не существует</returns>
-        Task<bool> LoginExistsAsync(string login);
+        /// <returns>Возвращает пользователя</returns>
+        Task<User?> GetByLoginAsync(string login);
     }
 }
