@@ -4,7 +4,7 @@ using NexusLing.Application.DTOs;
 
 namespace NexusLing.Application.Validators
 {
-    public class ChangePasswordUserValidator : AbstractValidator<RegisterUserDTO>
+    public class ChangePasswordUserValidator : AbstractValidator<ChangePasswordUserDTO>
     {
         public ChangePasswordUserValidator()
         {
