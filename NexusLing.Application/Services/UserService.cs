@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using NexusLing.Application.Common.Exceptions;
+using NexusLing.Application.Common.Interfaces;
 using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
@@ -10,6 +11,7 @@ using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.ValueObjects;
 using System.Data;
+using System.Text;
 
 namespace NexusLing.Application.Services
 {
@@ -20,11 +22,13 @@ namespace NexusLing.Application.Services
     {
         private readonly IRepository _repository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IValidationService _validationService;
 
-        public UserService(IRepository repository, IPasswordHasher passwordHasher)
+        public UserService(IRepository repository, IPasswordHasher passwordHasher, IValidationService validationService)
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
+            _validationService = validationService;
         }
 
         /// <summary>
@@ -54,17 +58,7 @@ namespace NexusLing.Application.Services
         /// <returns>Объект после добавления в БД</returns>
         public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
         {
-            var validator = new RegisterUserValidator();
-            var validatorResult = await validator.ValidateAsync(rUser);
-
-            if (!validatorResult.IsValid)
-            {
-                var errorResponse = validatorResult.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-                throw new ValidatorException(errorResponse);
-            }                
-
+            await _validationService.ValidateAndThrowAsync(rUser);
             var user = User.Create(rUser.FirstName, rUser.LastName, Login.Create(rUser.Login), PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
             await _repository.UserRepository.AddAsync(user);
             return user.ToDto();
@@ -76,16 +70,7 @@ namespace NexusLing.Application.Services
         /// <param name="uUser">Изменяемый пользователь</param>
         public async Task UpdateUserAsync(Guid id, UpdateUserDTO uUser)
         {
-            var validator = new UpdateUserValidator();
-            var validatorResult = await validator.ValidateAsync(uUser);
-
-            if (!validatorResult.IsValid)
-            {
-                var errorResponse = validatorResult.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-                throw new ValidatorException(errorResponse);
-            }
+            await _validationService.ValidateAndThrowAsync(uUser);
             if (id != uUser.Id)
                 throw new IdNotEqualException(id, uUser.Id);
 

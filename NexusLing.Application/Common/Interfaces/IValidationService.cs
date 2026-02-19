@@ -2,7 +2,7 @@
 
 namespace NexusLing.Application.Common.Interfaces
 {
-    internal interface IValidationService
+    public interface IValidationService
     {
         /// <summary>
         /// Валидирует объект и возвращает результат
