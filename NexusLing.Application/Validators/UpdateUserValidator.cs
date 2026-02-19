@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
 using NexusLing.Application.Common;
 using NexusLing.Application.DTOs;
+using NexusLing.Domain.Interfaces;
 
 namespace NexusLing.Application.Validators
 {
     public class UpdateUserValidator : AbstractValidator<UpdateUserDTO>
     {
-        public UpdateUserValidator()
+        public UpdateUserValidator(IRepository repository)
         {
-            Include(new UserBaseValidator<UpdateUserDTO>());
+            Include(new UserBaseValidator<UpdateUserDTO>(repository));
 
             RuleFor(u => u.Password)
                 .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Пароль"))

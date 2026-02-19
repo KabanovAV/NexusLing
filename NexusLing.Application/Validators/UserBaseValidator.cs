@@ -1,13 +1,18 @@
 ﻿using FluentValidation;
 using NexusLing.Application.Bases;
 using NexusLing.Application.Common;
+using NexusLing.Domain.Interfaces;
 
 namespace NexusLing.Application.Validators
 {
     public class UserBaseValidator<T> : AbstractValidator<T> where T : UserBaseDTO
     {
-        public UserBaseValidator()
+        private readonly IRepository _repository;
+
+        public UserBaseValidator(IRepository repository)
         {
+            _repository = repository;
+
             RuleFor(u => u.FirstName)
                 .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Имя"))
                 .Matches(@"^[a-zA-Zа-яА-Я\s\-]+$").WithMessage("Имя может содержать только буквы, пробелы и дефис");
@@ -18,7 +23,14 @@ namespace NexusLing.Application.Validators
 
             RuleFor(u => u.Login)
                 .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Логин"))
-                .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.Length, "Логин", 3, 64));
+                .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.Length, "Логин", 3, 64))
+                .MustAsync(BeExistLogin).WithMessage("Пользователь с таким логином уже существует");
+        }
+
+        private async Task<bool> BeExistLogin(string login, CancellationToken cancellationToken)
+        {
+            var user = await _repository.UserRepository.GetByLoginAsync(login);
+            return user == null;
         }
     }
 }
