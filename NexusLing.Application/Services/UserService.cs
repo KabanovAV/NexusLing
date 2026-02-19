@@ -68,11 +68,22 @@ namespace NexusLing.Application.Services
             await _validationService.ValidateAndThrowAsync(uUser);
             if (id != uUser.Id)
                 throw new IdNotEqualException(id, uUser.Id);
-
             var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
             user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login);
-            if (!_passwordHasher.Verify(uUser.Password, user.PasswordHash.Value))
-                user.ChangePassword(uUser.Password);
+            await _repository.UserRepository.Update(user);
+        }
+
+        /// <summary>
+        /// Изменить пароль пользователя
+        /// </summary>
+        /// <param name="uPassword">Новый пароль пользователя</param>
+        public async Task UpdatePasswordAsync(Guid id, ChangePasswordDTO uPassword)
+        {
+            await _validationService.ValidateAndThrowAsync(uPassword);
+            if (id != uPassword.Id)
+                throw new IdNotEqualException(id, uPassword.Id);
+            var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
+            user.ChangePassword(uPassword.Password);
             await _repository.UserRepository.Update(user);
         }
 
