@@ -4,9 +4,9 @@ using NexusLing.Application.DTOs;
 
 namespace NexusLing.Application.Validators
 {
-    public class ChangePasswordUserValidator : AbstractValidator<ChangePasswordUserDTO>
+    public class ChangePasswordValidator : AbstractValidator<ChangePasswordDTO>
     {
-        public ChangePasswordUserValidator()
+        public ChangePasswordValidator()
         {
             RuleFor(u => u.Password)
                 .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Пароль"))
