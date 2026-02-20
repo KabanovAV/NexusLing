@@ -34,14 +34,25 @@ namespace NexusLing.Domain.Entities
             => new(firstName, lastName, Login.Create(login), passwordHash);
 
 
-        public void ApplyUpdate(string firstName, string lastName, string login)
+        public bool ApplyUpdate(string? firstName, string? lastName, string? login)
         {
+            var hasChanges = false;
             if (firstName != null && firstName != FirstName)
+            {
                 FirstName = firstName;
+                hasChanges = true;
+            }
             if (lastName != null && lastName != LastName)
+            {
                 LastName = lastName;
+                hasChanges = true;
+            }
             if (login != null && login != Login.Value)
+            {
                 Login = Login.Create(login);
+                hasChanges = true;
+            }
+            return hasChanges;
         }
 
         public void ChangePassword(PasswordHash newPassword)
