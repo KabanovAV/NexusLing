@@ -83,7 +83,7 @@ namespace NexusLing.Application.Services
             if (id != uPassword.Id)
                 throw new IdNotEqualException(id, uPassword.Id);
             var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
-            user.ChangePassword(uPassword.Password);
+            user.ChangePassword(PasswordHash.Create(_passwordHasher.Hash(uPassword.Password)));
             await _repository.UserRepository.Update(user);
         }
 
