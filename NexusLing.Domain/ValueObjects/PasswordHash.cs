@@ -5,6 +5,9 @@ namespace NexusLing.Domain.ValueObjects
 {
     public sealed class PasswordHash : ValueObject
     {
+        public const int MinLength = 8;
+        public const int MaxLength = 64;
+
         public string Value { get; }
 
         private PasswordHash(string value)
@@ -15,11 +18,11 @@ namespace NexusLing.Domain.ValueObjects
         public static PasswordHash Create(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new DomainException("Хэш пароля не может быть пустым.");
-            if (!value.StartsWith("$PBKDF2$"))
-                throw new DomainException("Некорректный формат хэша.");
-            if (value.Length > 256)
-                throw new DomainException("Хэш пароля превышает допустимую длину.");
+                throw new DomainException("Пароль не может быть пустым.");
+            if (value.Length < MinLength)
+                throw new DomainException($"Пароль должен содержать минимум {MinLength} символов.");
+            if (value.Length > MaxLength)
+                throw new DomainException($"Пароль не может быть длиннее {MaxLength} символов.");
             return new(value);
         }
 
