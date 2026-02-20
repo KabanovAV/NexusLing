@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
-using NexusLing.Application.Validators;
-using NexusLing.Domain.Entities;
 
 namespace NexusLing.WebApi.Controllers
 {
@@ -49,7 +47,7 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="rUser">Пользователь</param>
         /// <returns>Возвращает нового пользователя</returns>
         /// <response code="201">Успешное выполнение запроса</response>
-        /// <response code="400">Пустой обьект пользователя</response>
+        /// <response code="400">Ошибка валидации данных</response>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -65,8 +63,8 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="userId">Id пользователя</param>
         /// <param name="uUser">Измененные данные пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
-        /// <response code="400">Пустые данные</response>
-        /// <response code="400">Id не совпадают</response>
+        /// <response code="400">Ошибка валидации данных</response>
+        /// <response code="400">Несовпадение идентификаторов</response>
         [HttpPatch("{userId:guid}/profile")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -82,8 +80,8 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="userId">Id пользователя</param>
         /// <param name="uPassword">Новый пароль пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
-        /// <response code="400">Пустые данные</response>
-        /// <response code="400">Id не совпадают</response>
+        /// <response code="400">Ошибка валидации данных</response>
+        /// <response code="400">Несовпадение идентификаторов</response>
         [HttpPatch("{userId:guid}/password")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
