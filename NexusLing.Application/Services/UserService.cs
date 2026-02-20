@@ -54,7 +54,7 @@ namespace NexusLing.Application.Services
         public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
         {
             await _validationService.ValidateAndThrowAsync(rUser);
-            var user = User.Create(rUser.FirstName, rUser.LastName, Login.Create(rUser.Login), PasswordHash.Create(_passwordHasher.Hash(rUser.Password)));
+            var user = User.Create(rUser.FirstName, rUser.LastName, Login.Create(rUser.Login), _passwordHasher.Hash(rUser.Password));
             await _repository.UserRepository.AddAsync(user);
             return user.ToDto();
         }
@@ -83,7 +83,7 @@ namespace NexusLing.Application.Services
             if (id != uPassword.Id)
                 throw new IdNotEqualException(id, uPassword.Id);
             var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
-            user.ChangePassword(PasswordHash.Create(_passwordHasher.Hash(uPassword.Password)));
+            user.ChangePassword(_passwordHasher.Hash(uPassword.Password));
             await _repository.UserRepository.Update(user);
         }
 
