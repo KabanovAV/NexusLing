@@ -23,7 +23,7 @@ namespace NexusLing.Application.Validators
 
             RuleFor(u => u.Login)
                 .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Логин"))
-                .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.Length, "Логин", 3, 64))
+                .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.LengthFromTo, "Логин", 3, 64))
                 .MustAsync(BeExistLogin).WithMessage("Пользователь с таким логином уже существует");
         }
 

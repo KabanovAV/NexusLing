@@ -49,8 +49,8 @@ namespace NexusLing.Infrastructure.Repositories
         /// <returns>Объект после добавления в БД</returns>
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            ApplieAuditable();
             EntityEntry<TEntity> value = await DbSet.AddAsync(entity);
+            ApplieAuditable();
             await Context.SaveChangesAsync();
             return value.Entity;
         }
@@ -65,8 +65,8 @@ namespace NexusLing.Infrastructure.Repositories
             List<TEntity> entityList = [.. entities];
             if (entityList.Count == 0)
                 return [];
-            ApplieAuditable();
             await DbSet.AddRangeAsync(entityList);
+            ApplieAuditable();
             await Context.SaveChangesAsync();
             return entityList;
         }
@@ -77,8 +77,8 @@ namespace NexusLing.Infrastructure.Repositories
         /// <param name="entity">Изменяемый объект</param>
         public virtual async Task Update(TEntity entity)
         {
-            ApplieAuditable();
             DbSet.Update(entity);
+            ApplieAuditable();
             await Context.SaveChangesAsync();
         }
 
@@ -90,9 +90,9 @@ namespace NexusLing.Infrastructure.Repositories
         {
             List<TEntity> entityList = [.. entities];
             if (entityList.Count == 0)
-                return;
-            ApplieAuditable();
+                return;            
             DbSet.UpdateRange(entityList);
+            ApplieAuditable();
             await Context.SaveChangesAsync();
         }
 
