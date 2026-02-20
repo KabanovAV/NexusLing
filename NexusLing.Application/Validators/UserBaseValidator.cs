@@ -2,6 +2,7 @@
 using NexusLing.Application.Bases;
 using NexusLing.Application.Common;
 using NexusLing.Domain.Interfaces;
+using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Validators
 {
@@ -29,7 +30,8 @@ namespace NexusLing.Application.Validators
 
         private async Task<bool> BeExistLogin(string login, CancellationToken cancellationToken)
         {
-            var user = await _repository.UserRepository.GetByLoginAsync(login);
+            var loginVO = Login.Create(login);
+            var user = await _repository.UserRepository.GetByLoginAsync(loginVO.Value);
             return user == null;
         }
     }
