@@ -1,4 +1,6 @@
-﻿namespace NexusLing.Application.Interfaces
+﻿using NexusLing.Domain.ValueObjects;
+
+namespace NexusLing.Application.Interfaces
 {
     /// <summary>
     /// Интерфейс сервиса хэширования пароля
@@ -10,7 +12,7 @@
         /// </summary>
         /// <param name="password">Пароль</param>
         /// <returns>Возвращает хэшированный пароль</returns>
-        string Hash(string password);
+        PasswordHash Hash(string password);
 
         /// <summary>
         /// Верификаци пароля
@@ -18,6 +20,6 @@
         /// <param name="password">Пароль</param>
         /// <param name="passwordHash">Хэшированный пароль</param>
         /// <returns>Возвращает true если пароль прошел верификацию, false не прошел</returns>
-        bool Verify(string password, string passwordHash);
+        bool Verify(string password, PasswordHash passwordHash);
     }
 }
