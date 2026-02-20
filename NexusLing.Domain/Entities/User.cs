@@ -30,8 +30,9 @@ namespace NexusLing.Domain.Entities
             LastName = lastName;
         }
 
-        public static User Create(string firstName, string lastName, Login login, PasswordHash passwordHash)
-            => new(firstName, lastName, login, passwordHash);
+        public static User Create(string firstName, string lastName, string login, PasswordHash passwordHash)
+            => new(firstName, lastName, Login.Create(login), passwordHash);
+
 
         public void ApplyUpdate(string firstName, string lastName, string login)
         {
