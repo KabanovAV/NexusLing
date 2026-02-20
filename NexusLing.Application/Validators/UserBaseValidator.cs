@@ -14,18 +14,27 @@ namespace NexusLing.Application.Validators
         {
             _repository = repository;
 
-            RuleFor(u => u.FirstName)
-                .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Имя"))
-                .Matches(@"^[a-zA-Zа-яА-Я\s\-]+$").WithMessage("Имя может содержать только буквы, пробелы и дефис");
+            When(u => u.FirstName != null, () =>
+            {
+                RuleFor(u => u.FirstName)
+                    .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Имя"))
+                    .Matches(@"^[a-zA-Zа-яА-Я\s\-]+$").WithMessage("Имя может содержать только буквы, пробелы и дефис");
+            });
 
-            RuleFor(u => u.LastName)
-                .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Фамилия"))
-                .Matches(@"^[a-zA-Zа-яА-Я\s\-]+$").WithMessage("Фамилия может содержать только буквы, пробелы и дефис");
+            When(u => u.LastName != null, () =>
+            {
+                RuleFor(u => u.LastName)
+                    .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Фамилия"))
+                    .Matches(@"^[a-zA-Zа-яА-Я\s\-]+$").WithMessage("Фамилия может содержать только буквы, пробелы и дефис");
+            });
 
-            RuleFor(u => u.Login)
-                .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Логин"))
-                .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.LengthFromTo, "Логин", 3, 64))
-                .MustAsync(BeExistLogin).WithMessage("Пользователь с таким логином уже существует");
+            When(u => u.Login != null, () =>
+            {
+                RuleFor(u => u.Login)
+                    .NotEmpty().WithMessage(x => string.Format(ValidationMessages.Required, "Логин"))
+                    .Length(3, 64).WithMessage(x => string.Format(ValidationMessages.LengthFromTo, "Логин", 3, 64))
+                    .MustAsync(BeExistLogin).WithMessage("Пользователь с таким логином уже существует");
+            });
         }
 
         private async Task<bool> BeExistLogin(string login, CancellationToken cancellationToken)

@@ -36,11 +36,11 @@ namespace NexusLing.Domain.Entities
 
         public void ApplyUpdate(string firstName, string lastName, string login)
         {
-            if (firstName != FirstName)
+            if (firstName != null && firstName != FirstName)
                 FirstName = firstName;
-            if (lastName != LastName)
+            if (lastName != null && lastName != LastName)
                 LastName = lastName;
-            if (login != Login.Value)
+            if (login != null && login != Login.Value)
                 Login = Login.Create(login);
         }
 
