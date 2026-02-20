@@ -27,8 +27,7 @@ namespace NexusLing.Infrastructure.Database.Configurations
             builder.ComplexProperty(x => x.PasswordHash, b =>
             {
                 b.Property(p => p.Value).HasColumnName("PasswordHash")
-                    .IsRequired()
-                    .HasMaxLength(PasswordHash.MaxLength);
+                    .IsRequired();
             });
         }
     }
