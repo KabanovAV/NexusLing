@@ -69,8 +69,8 @@ namespace NexusLing.Application.Services
             if (id != uUser.Id)
                 throw new IdNotEqualException(id, uUser.Id);
             var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
-            user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login);
-            await _repository.UserRepository.Update(user);
+            if (user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login))
+                await _repository.UserRepository.Update(user);
         }
 
         /// <summary>
