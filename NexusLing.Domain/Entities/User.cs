@@ -43,7 +43,7 @@ namespace NexusLing.Domain.Entities
                 Login = Login.Create(login);
         }
 
-        public void ChangePassword(string newPassword)
-            => PasswordHash = PasswordHash.Create(newPassword);
+        public void ChangePassword(PasswordHash newPassword)
+            => PasswordHash = newPassword;
     }
 }
