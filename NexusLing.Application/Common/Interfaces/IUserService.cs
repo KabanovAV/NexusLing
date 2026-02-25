@@ -23,9 +23,9 @@ namespace NexusLing.Application.Interfaces
         /// <summary>
         /// Получение одного пользователя из набора данных по логину
         /// </summary>
-        /// <param name="login">Логин пользователя</param>
+        /// <param name="loginUser">Логин пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        Task<UserDTO> GetUserByLoginAsync(string login);
+        Task<UserDTO> GetUserByLoginAsync(string loginUser);
 
         /// <summary>
         /// Добавить одиного пользователя в набор данных
