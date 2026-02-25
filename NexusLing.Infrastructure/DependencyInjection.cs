@@ -14,9 +14,10 @@ namespace NexusLing.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
             => services.AddDatabase(configuration)
                 .AddRepository()
-                .AddPasswordHasher();
+                .AddPasswordHasher()
+                .AddJwtProvider();
 
-        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("Database");
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
@@ -24,10 +25,13 @@ namespace NexusLing.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddRepository(this IServiceCollection services)
+        private static IServiceCollection AddRepository(this IServiceCollection services)
             => services.AddScoped<IRepository, Repository>();
 
-        public static IServiceCollection AddPasswordHasher(this IServiceCollection services)
+        private static IServiceCollection AddPasswordHasher(this IServiceCollection services)
             => services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+        private static IServiceCollection AddJwtProvider(this IServiceCollection services)
+           => services.AddScoped<IJwtProvider, JwtProvider>();
     }
 }
