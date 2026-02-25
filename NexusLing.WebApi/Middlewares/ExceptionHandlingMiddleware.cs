@@ -32,7 +32,7 @@ namespace NexusLing.WebApi.Middlewares
                     path = context.Request.Path
                 });
             }
-            catch (IdNotEqualException ex)
+            catch (NotEqualIdException ex)
             {
                 Log.Warning(ex, "Id ресурсов не совпадают: {Path} метод {Method}", context.Request.Path, context.Request.Method);
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
