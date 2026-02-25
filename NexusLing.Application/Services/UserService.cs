@@ -37,13 +37,25 @@ namespace NexusLing.Application.Services
         }
 
         /// <summary>
-        /// Получение одного пользователя из набора данных
+        /// Получение одного пользователя из набора данных по Id
         /// </summary>
+        /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        public async Task<UserDTO> GetUserAsync(Guid id)
+        public async Task<UserDTO> GetUserByIdAsync(Guid id)
         {
-            var user = await _repository.UserRepository.GetUserAsync(id);
-            return user == null ? throw new NotFoundException("User", id) : user.ToDto();
+            var user = await _repository.UserRepository.GetUserByIdAsync(id);
+            return user == null ? throw new NotFoundIdException("User", id) : user.ToDto();
+        }
+
+        /// <summary>
+        /// Получение одного пользователя из набора данных по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает одного пользователя из набора данных</returns>
+        public async Task<UserDTO> GetUserByLoginAsync(string login)
+        {
+            var user = await _repository.UserRepository.GetUserByLoginAsync(login);
+            return user == null ? throw new NotFoundLoginException("User", login) : user.ToDto();
         }
 
         /// <summary>
@@ -68,7 +80,7 @@ namespace NexusLing.Application.Services
             await _validationService.ValidateAndThrowAsync(uUser);
             if (id != uUser.Id)
                 throw new IdNotEqualException(id, uUser.Id);
-            var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
+            var user = await _repository.UserRepository.GetUserByIdAsync(id) ?? throw new NotFoundIdException("User", id);
             if (user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login))
                 await _repository.UserRepository.Update(user);
         }
@@ -82,7 +94,7 @@ namespace NexusLing.Application.Services
             await _validationService.ValidateAndThrowAsync(uPassword);
             if (id != uPassword.Id)
                 throw new IdNotEqualException(id, uPassword.Id);
-            var user = await _repository.UserRepository.GetUserAsync(id) ?? throw new NotFoundException("User", id);
+            var user = await _repository.UserRepository.GetUserByIdAsync(id) ?? throw new NotFoundIdException("User", id);
             user.ChangePassword(_passwordHasher.Hash(uPassword.Password));
             await _repository.UserRepository.Update(user);
         }
