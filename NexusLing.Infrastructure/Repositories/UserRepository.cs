@@ -25,7 +25,7 @@ namespace NexusLing.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        public async Task<User> GetUserAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(Guid id)
             => await GetAsync(id);
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace NexusLing.Infrastructure.Repositories
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает пользователя</returns>
-        public async Task<User?> GetByLoginAsync(string login)
+        public async Task<User?> GetUserByLoginAsync(string login)
         {
             var user = await PlainData.FirstOrDefaultAsync(u => u.Login.Value == login);
             if (user == null)

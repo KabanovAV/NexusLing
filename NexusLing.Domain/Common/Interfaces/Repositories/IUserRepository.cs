@@ -18,13 +18,13 @@ namespace NexusLing.Domain.Interfaces
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        Task<User> GetUserAsync(Guid id);
+        Task<User> GetUserByIdAsync(Guid id);
 
         /// <summary>
         /// Получение пользователя по логину
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает пользователя</returns>
-        Task<User?> GetByLoginAsync(string login);
+        Task<User?> GetUserByLoginAsync(string login);
     }
 }
