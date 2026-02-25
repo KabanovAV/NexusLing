@@ -2,9 +2,9 @@
 
 namespace NexusLing.Domain.Common.Exceptions
 {
-    public class IdNotEqualException : DomainException
+    public class NotEqualIdException : DomainException
     {
-        public IdNotEqualException(object expectedId, object actualId)
+        public NotEqualIdException(object expectedId, object actualId)
             : base($"Несовпадение идентификаторов: ожидался '{expectedId}', получен '{actualId}'") { }
     }
 }
