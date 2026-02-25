@@ -1,17 +1,17 @@
 ﻿using NexusLing.Application.Common.Interfaces;
 using NexusLing.Application.DTOs;
-using NexusLing.Domain.Interfaces;
+using NexusLing.Application.Interfaces;
 
 namespace NexusLing.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IRepository _repository;
+        private readonly IUserService _service;
         private readonly IValidationService _validationService;
 
-        public AuthService(IRepository repository, IValidationService validationService)
+        public AuthService(IUserService service, IValidationService validationService)
         {
-            _repository = repository;
+            _service = service;
             _validationService = validationService;
         }
 
