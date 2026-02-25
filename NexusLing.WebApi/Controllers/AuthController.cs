@@ -19,7 +19,7 @@ namespace NexusLing.WebApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
             var tokenResult = await _service.LoginAsync(login);
-            return Ok(new { Token = tokenResult });
+            return Ok(tokenResult);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace NexusLing.Application.Validators
         private async Task<bool> BeExistLogin(string login, CancellationToken cancellationToken)
         {
             var loginVO = Login.Create(login);
-            var user = await _repository.UserRepository.GetUserByLoginAsync(loginVO.Value);
+            var user = await _repository.UserRepository.GetByLoginAsync(loginVO.Value);
             return user == null;
         }
     }
