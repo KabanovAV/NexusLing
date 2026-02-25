@@ -89,6 +89,7 @@ namespace NexusLing.Application.Services
         /// <summary>
         /// Изменить пароль пользователя
         /// </summary>
+        /// <param name="id">Id пользователя</param>
         /// <param name="uPassword">Новый пароль пользователя</param>
         public async Task UpdatePasswordAsync(Guid id, ChangePasswordDTO uPassword)
         {
