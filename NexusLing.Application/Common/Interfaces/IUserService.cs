@@ -14,11 +14,18 @@ namespace NexusLing.Application.Interfaces
         Task<IEnumerable<UserDTO>> GetAllUserAsync();
 
         /// <summary>
-        /// Получение одного пользователя из набора данных
+        /// Получение одного пользователя из набора данных по Id
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        Task<UserDTO> GetUserAsync(Guid id);
+        Task<UserDTO> GetUserByIdAsync(Guid id);
+
+        /// <summary>
+        /// Получение одного пользователя из набора данных по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает одного пользователя из набора данных</returns>
+        Task<UserDTO> GetUserByLoginAsync(string login);
 
         /// <summary>
         /// Добавить одиного пользователя в набор данных
