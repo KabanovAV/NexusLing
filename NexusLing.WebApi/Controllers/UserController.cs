@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 
@@ -21,7 +20,6 @@ namespace NexusLing.WebApi.Controllers
         /// </summary>
         /// <returns>Возвращает список пользователей</returns>
         /// <response code="200">Успешное выполнение запроса</response>
-        [Authorize]
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUser()
@@ -39,7 +37,7 @@ namespace NexusLing.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<UserDTO>> GetUser([FromRoute] Guid userId)
         {
-            var user = await _service.GetUserByIdAsync(userId);
+            var user = await _service.GetUserAsync(userId);
             return Ok(user);
         }
 
