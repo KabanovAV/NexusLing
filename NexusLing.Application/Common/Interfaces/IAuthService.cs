@@ -1,9 +1,9 @@
 ﻿using NexusLing.Application.DTOs;
 
-namespace NexusLing.Application.Common.Interfaces
+namespace NexusLing.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(LoginDTO login);
+        Task<string> LoginAsync(LoginDTO request);
     }
 }
