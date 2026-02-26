@@ -21,7 +21,6 @@ namespace NexusLing.WebApi.Controllers
         /// </summary>
         /// <returns>Возвращает список пользователей</returns>
         /// <response code="200">Успешное выполнение запроса</response>
-        [Authorize]
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUser()
@@ -50,7 +49,7 @@ namespace NexusLing.WebApi.Controllers
         /// <returns>Возвращает нового пользователя</returns>
         /// <response code="201">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
@@ -67,7 +66,7 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
         /// <response code="400">Несовпадение идентификаторов</response>
-        [HttpPatch("{userId:guid}/profile")]
+        [HttpPatch("{userId:guid}/profile"), Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
@@ -84,7 +83,7 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
         /// <response code="400">Несовпадение идентификаторов</response>
-        [HttpPatch("{userId:guid}/password")]
+        [HttpPatch("{userId:guid}/password"), Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdatePassword([FromRoute] Guid userId, [FromBody] ChangePasswordDTO uPassword)
@@ -98,7 +97,7 @@ namespace NexusLing.WebApi.Controllers
         /// </summary>
         /// <param name="userId">Id пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
-        [HttpDelete("{userId:guid}")]
+        [HttpDelete("{userId:guid}"), Authorize]
         [ProducesResponseType(204)]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid userId)
         {
