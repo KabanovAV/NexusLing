@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -10,25 +10,35 @@ namespace NexusLing.Infrastructure.Authentications
 {
     public class JwtProvider : IJwtProvider
     {
-        private readonly JwtOptions _options;
+        private readonly IConfiguration _сonfiguration;
+        private const string SectionName = "Jwt";
 
-        public JwtProvider(IOptions<JwtOptions> options)
+        public JwtProvider(IConfiguration сonfiguration)
         {
-            _options = options.Value;
+            _сonfiguration = сonfiguration;
         }
 
         public string Generate(UserDTO user)
         {
-            var claims = new Claim[]
-            {
-                new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new (JwtRegisteredClaimNames.UniqueName, user.Login),
-                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key)), SecurityAlgorithms.HmacSha256);
+            var secretKey = _сonfiguration[$"{SectionName}:Key"]!;
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_options.Issuer, _options.Audience, claims, null, DateTime.UtcNow.AddHours(1), signingCredentials);
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(
+                [
+                    new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                    new (JwtRegisteredClaimNames.UniqueName, user.Login),
+                    new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                ]),
+                Expires = DateTime.UtcNow.AddMinutes(_сonfiguration.GetValue<int>($"{SectionName}:ExpirationInMinutes")),
+                SigningCredentials = signingCredentials,
+                Issuer = _сonfiguration[$"{SectionName}:Issuer"],
+                Audience = _сonfiguration[$"{SectionName}:Audience"]
+            };
+
+            string tokenValue = new JsonWebTokenHandler().CreateToken(tokenDescriptor);
             return tokenValue;
         }
     }
