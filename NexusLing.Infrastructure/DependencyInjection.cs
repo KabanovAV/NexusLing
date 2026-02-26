@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using NexusLing.Application.Interfaces;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Infrastructure.Authentications;
 using NexusLing.Infrastructure.Database;
 using NexusLing.Infrastructure.Repositories;
+using System.Text;
 
 namespace NexusLing.Infrastructure
 {
@@ -14,8 +17,8 @@ namespace NexusLing.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
             => services.AddDatabase(configuration)
                 .AddRepository()
-                .AddPasswordHasher()
-                .AddJwtProvider();
+                .AddAuthenticationInternal(configuration)
+                .AddAuthorizationInternal();
 
         private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
@@ -28,10 +31,29 @@ namespace NexusLing.Infrastructure
         private static IServiceCollection AddRepository(this IServiceCollection services)
             => services.AddScoped<IRepository, Repository>();
 
-        private static IServiceCollection AddPasswordHasher(this IServiceCollection services)
-            => services.AddScoped<IPasswordHasher, PasswordHasher>();
+        private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    };
+                });
 
-        private static IServiceCollection AddJwtProvider(this IServiceCollection services)
-           => services.AddScoped<IJwtProvider, JwtProvider>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtProvider, JwtProvider>();
+            return services;
+        }
+
+        private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
+            => services.AddAuthorization();
     }
 }
