@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace NexusLing.Application.Result
+namespace NexusLing.Application.Common
 {
     public class Result
     {

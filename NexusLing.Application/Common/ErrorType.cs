@@ -1,4 +1,4 @@
-﻿namespace NexusLing.Application.Result
+﻿namespace NexusLing.Application.Common
 {
     public enum ErrorType
     {
