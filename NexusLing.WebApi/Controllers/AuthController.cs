@@ -6,7 +6,7 @@ namespace NexusLing.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ApiController
     {
         private readonly IAuthService _service;
 
@@ -15,11 +15,17 @@ namespace NexusLing.WebApi.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Авторизация пользователя
+        /// </summary>
+        /// <returns>Возвращает токен</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO login)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> Login([FromBody] LoginDTO login)
         {
             var tokenResult = await _service.LoginAsync(login);
-            return Ok(new { Token = tokenResult });
+            return HandleOkResult(tokenResult);
         }
     }
 }
