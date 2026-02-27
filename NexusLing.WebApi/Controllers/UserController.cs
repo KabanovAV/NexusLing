@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NexusLing.Application.Common;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
 
@@ -22,9 +23,12 @@ namespace NexusLing.WebApi.Controllers
         /// <returns>Возвращает список пользователей</returns>
         /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUser()
-            => Ok(await _service.GetAllUserAsync());
+        {
+            var result = await _service.GetAllUserAsync();
+            return Ok(result.Value);
+        }
 
         /// <summary>
         /// Получение пользователя по Id
@@ -34,12 +38,14 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="200">Успешное выполнение запроса</response>
         /// <response code="404">Пользователь не найден</response>
         [HttpGet("{userId:guid}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDTO>> GetUser([FromRoute] Guid userId)
         {
-            var user = await _service.GetUserByIdAsync(userId);
-            return Ok(user);
+            var result = await _service.GetUserByIdAsync(userId);
+            if (result.IsFailure)
+                return NotFound(result.Error);
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -50,12 +56,14 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="201">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
         [HttpPost, Authorize]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
         {
-            var user = await _service.AddUserAsync(rUser);
-            return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user);
+            var result = await _service.AddUserAsync(rUser);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+            return CreatedAtAction(nameof(GetUser), new { userId = result.Value.Id }, result.Value);
         }
 
         /// <summary>
@@ -66,12 +74,21 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
         /// <response code="400">Несовпадение идентификаторов</response>
+        /// <response code="404">Пользователь не найден</response>
         [HttpPatch("{userId:guid}/profile"), Authorize]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDTO uUser)
         {
-            await _service.UpdateUserAsync(userId, uUser);
+            var result = await _service.UpdateUserAsync(userId, uUser);
+            if (result.IsFailure)
+            {
+                if (result.Error.Type == ErrorType.NotFound)
+                    return NotFound(result.Error);
+                else
+                    return BadRequest(result.Error);
+            }
             return NoContent();
         }
 
@@ -83,12 +100,21 @@ namespace NexusLing.WebApi.Controllers
         /// <response code="204">Успешное выполнение запроса</response>
         /// <response code="400">Ошибка валидации данных</response>
         /// <response code="400">Несовпадение идентификаторов</response>
+        /// <response code="404">Пользователь не найден</response>
         [HttpPatch("{userId:guid}/password"), Authorize]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdatePassword([FromRoute] Guid userId, [FromBody] ChangePasswordDTO uPassword)
         {
-            await _service.UpdatePasswordAsync(userId, uPassword);
+            var result = await _service.UpdatePasswordAsync(userId, uPassword);
+            if (result.IsFailure)
+            {
+                if (result.Error.Type == ErrorType.NotFound)
+                    return NotFound(result.Error);
+                else
+                    return BadRequest(result.Error);
+            }
             return NoContent();
         }
 
@@ -98,7 +124,7 @@ namespace NexusLing.WebApi.Controllers
         /// <param name="userId">Id пользователя</param>
         /// <response code="204">Успешное выполнение запроса</response>
         [HttpDelete("{userId:guid}"), Authorize]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid userId)
         {
             await _service.DeleteUserAsync(userId);
