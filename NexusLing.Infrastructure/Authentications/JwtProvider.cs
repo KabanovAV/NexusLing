@@ -8,6 +8,9 @@ using System.Text;
 
 namespace NexusLing.Infrastructure.Authentications
 {
+    /// <summary>
+    /// Провайдер Jwt
+    /// </summary>
     public class JwtProvider : IJwtProvider
     {
         private readonly IConfiguration _сonfiguration;
@@ -18,6 +21,11 @@ namespace NexusLing.Infrastructure.Authentications
             _сonfiguration = сonfiguration;
         }
 
+        /// <summary>
+        /// Генерация токена
+        /// </summary>
+        /// <param name="user">Пользователь</param>
+        /// <returns>Возвращает токен</returns>
         public string Generate(UserDTO user)
         {
             var secretKey = _сonfiguration[$"{SectionName}:Key"]!;

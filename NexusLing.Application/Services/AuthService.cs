@@ -6,6 +6,9 @@ using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Services
 {
+    /// <summary>
+    /// Сервис авторизации и идентификации пользователя
+    /// </summary>
     public class AuthService : IAuthService
     {
         private readonly IUserService _service;
@@ -19,6 +22,11 @@ namespace NexusLing.Application.Services
             _validationService = validationService;
         }
 
+        /// <summary>
+        /// Авторизация пользователя
+        /// </summary>
+        /// <param name="request">Параметры логирования</param>
+        /// <returns>Возвращает результат авторизации, при успешной авторизации возвращает токен</returns>
         public async Task<Result<string>> LoginAsync(LoginDTO request)
         {
             var result = await _validationService.ValidateAsync(request);
