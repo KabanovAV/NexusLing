@@ -32,8 +32,6 @@ namespace NexusLing.Application.Services
         public async Task<Result<IEnumerable<UserDTO>>> GetAllUserAsync()
         {
             var users = await _repository.UserRepository.GetAllUserAsync();
-            if (users == null)
-                return Result.Failure<IEnumerable<UserDTO>>(Error.NotFound("User.NotFound", "Пользователи не найдены"));
             return users.ToDto();
         }
 
