@@ -1,16 +1,20 @@
-﻿namespace NexusLing.Application.Common
+﻿using FluentValidation.Results;
+
+namespace NexusLing.Application.Common
 {
     public record Error
     {
         public string Code { get; }
         public string Description { get; }
         public ErrorType Type { get; }
+        public Dictionary<string, string[]>? ValidationErrors { get; }
 
-        public Error(string code, string description, ErrorType type)
+        public Error(string code, string description, ErrorType type, Dictionary<string, string[]>? validationErrors = null)
         {
             Code = code;
             Description = description;
             Type = type;
+            ValidationErrors = validationErrors;
         }
 
         public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
@@ -28,7 +32,12 @@
         public static Error Conflict(string code, string description)
             => new(code, description, ErrorType.Conflict);
 
-        public static Error Validation(string code, string description)
-            => new(code, description, ErrorType.Validation);
+        public static Error Validation(string code, string description, ValidationResult validationResult)
+        {
+            var errors = validationResult.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+            return new(code, description, ErrorType.Validation, errors);
+        }            
     }
 }
