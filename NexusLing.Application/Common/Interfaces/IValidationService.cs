@@ -12,13 +12,13 @@ namespace NexusLing.Application.Common.Interfaces
         /// </summary>
         /// <typeparam name="T">Тип обьекта</typeparam>
         /// <param name="instance">Обьект валидации</param>
-        Task<ValidationResult> ValidateAsync<T>(T instance);
+        Task<ValidationResult> ValidateResultAsync<T>(T instance);
 
         /// <summary>
         /// Валидирует объект и выбрасывает исключение при ошибках
         /// </summary>  
         /// <typeparam name="T">Тип обьекта</typeparam>
         /// <param name="instance">Обьект валидации</param>
-        Task<Result<T>> ValidateAndThrowAsync<T>(T instance);
+        Task<Result<T>> ValidateAsync<T>(T instance);
     }
 }

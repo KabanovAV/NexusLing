@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
+using NexusLing.Application.Common;
 using NexusLing.Application.Common.Exceptions;
 using NexusLing.Application.Common.Interfaces;
+using NexusLing.Application.DTOs;
+using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Services
 {
@@ -23,20 +26,18 @@ namespace NexusLing.Application.Services
         /// </summary>  
         /// <typeparam name="T">Тип обьекта</typeparam>
         /// <param name="instance">Обьект валидации</param>
-        public async Task ValidateAndThrowAsync<T>(T instance)
+        public async Task<Result<T>> ValidateAsync<T>(T instance)
         {
             var validator = _serviceProvider.GetService<IValidator<T>>();
             if (validator == null)
-                return;
+                return Result.Failure<T>(Error.Failure("Validation.MissingValidator", $"Валидатор типа '{typeof(T)}' не найден"));
 
-            var validatorResult = await validator.ValidateAsync(instance);
-            if (!validatorResult.IsValid)
+            var validationResult = await validator.ValidateAsync(instance);
+            if (!validationResult.IsValid)
             {
-                var errorResponse = validatorResult.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-                throw new ValidatorException(errorResponse);
+                return Result<T>.ValidationFailure(Error.Validation("User.Validation", "Ошибка валидации входных данных", validationResult));
             }
+            return Result<T>.Success(instance);
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace NexusLing.Application.Services
         /// </summary>
         /// <typeparam name="T">Тип обьекта</typeparam>
         /// <param name="instance">Обьект валидации</param>
-        public async Task<ValidationResult> ValidateAsync<T>(T instance)
+        public async Task<ValidationResult> ValidateResultAsync<T>(T instance)
         {
             var validator = _serviceProvider.GetService<IValidator<T>>();
             if (validator == null)
