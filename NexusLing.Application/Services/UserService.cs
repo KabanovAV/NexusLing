@@ -1,10 +1,9 @@
-﻿using NexusLing.Application.Common.Interfaces;
+﻿using NexusLing.Application.Common;
+using NexusLing.Application.Common.Interfaces;
 using NexusLing.Application.Common.Mappings;
 using NexusLing.Application.DTOs;
 using NexusLing.Application.Interfaces;
-using NexusLing.Domain.Common.Exceptions;
 using NexusLing.Domain.Entities;
-using NexusLing.Domain.Exceptions;
 using NexusLing.Domain.Interfaces;
 using NexusLing.Domain.ValueObjects;
 
@@ -30,9 +29,11 @@ namespace NexusLing.Application.Services
         /// Получение всех пользователей из набора данных
         /// </summary>
         /// <returns>Возвращает список всех пользователей из набора данных</returns>
-        public async Task<IEnumerable<UserDTO>> GetAllUserAsync()
+        public async Task<Result<IEnumerable<UserDTO>>> GetAllUserAsync()
         {
             var users = await _repository.UserRepository.GetAllUserAsync();
+            if (users == null)
+                return Result.Failure<IEnumerable<UserDTO>>(Error.NotFound("User.NotFound", "Пользователи не найдены"));
             return users.ToDto();
         }
 
@@ -41,10 +42,12 @@ namespace NexusLing.Application.Services
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        public async Task<UserDTO> GetUserByIdAsync(Guid id)
+        public async Task<Result<UserDTO>> GetUserByIdAsync(Guid id)
         {
             var user = await _repository.UserRepository.GetUserByIdAsync(id);
-            return user == null ? throw new NotFoundException("User", id) : user.ToDto();
+            if (user == null)
+                return Result.Failure<UserDTO>(Error.NotFound("User.NotFound", $"Пользователь с идентификатором '{id}' не найден"));
+            return user.ToDto();
         }
 
         /// <summary>
@@ -52,11 +55,13 @@ namespace NexusLing.Application.Services
         /// </summary>
         /// <param name="loginUser">Логин пользователя</param>
         /// <returns>Возвращает одного пользователя из набора данных</returns>
-        public async Task<UserDTO> GetUserByLoginAsync(string loginUser)
+        public async Task<Result<UserDTO>> GetUserByLoginAsync(string loginUser)
         {
             var login = Login.Create(loginUser);
             var user = await _repository.UserRepository.GetUserByLoginAsync(login.Value);
-            return user == null ? throw new NotFoundException("User", "логин", login.Value) : user.ToDto();
+            if (user == null)
+                return Result.Failure<UserDTO>(Error.NotFound("User.NotFoundByLogin", $"Пользователь с логином '{login.Value}' не найден"));
+            return user.ToDto();
         }
 
         /// <summary>
@@ -64,26 +69,38 @@ namespace NexusLing.Application.Services
         /// </summary>
         /// <param name="rUser">Добавляемый пользователь</param>
         /// <returns>Объект после добавления в БД</returns>
-        public async Task<UserDTO> AddUserAsync(RegisterUserDTO rUser)
+        public async Task<Result<UserDTO>> AddUserAsync(RegisterUserDTO rUser)
         {
-            await _validationService.ValidateAndThrowAsync(rUser);
-            var user = User.Create(rUser.FirstName, rUser.LastName, rUser.Login, _passwordHasher.Hash(rUser.Password));
-            await _repository.UserRepository.AddAsync(user);
-            return user.ToDto();
+            var result = await _validationService.ValidateAsync(rUser);
+            if (result.IsSuccess)
+            {
+                var user = User.Create(rUser.FirstName, rUser.LastName, rUser.Login, _passwordHasher.Hash(rUser.Password));
+                await _repository.UserRepository.AddAsync(user);
+                return user.ToDto();
+            }
+            return Result.Failure<UserDTO>(result.Error);
         }
 
         /// <summary>
         /// Изменить одиного пользователя в наборе данных
         /// </summary>
         /// <param name="uUser">Изменяемый пользователь</param>
-        public async Task UpdateUserAsync(Guid id, UpdateUserDTO uUser)
+        public async Task<Result> UpdateUserAsync(Guid id, UpdateUserDTO uUser)
         {
-            await _validationService.ValidateAndThrowAsync(uUser);
             if (id != uUser.Id)
-                throw new NotEqualIdException(id, uUser.Id);
-            var user = await _repository.UserRepository.GetUserByIdAsync(id) ?? throw new NotFoundException("User", id);
-            if (user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login))
-                await _repository.UserRepository.Update(user);
+                return Result.Failure(Error.Conflict("User.NotEqualId", $"Несовпадение идентификаторов: ожидался '{id}', получен '{uUser.Id}'"));
+
+            var result = await _validationService.ValidateAsync(uUser);
+            if (result.IsSuccess)
+            {
+                var user = await _repository.UserRepository.GetUserByIdAsync(id);
+                if (user == null)
+                    return Result.Failure(Error.NotFound("User.NotFound", $"Пользователь с идентификатором '{id}' не найден"));
+                if (user.ApplyUpdate(uUser.FirstName, uUser.LastName, uUser.Login))
+                    await _repository.UserRepository.Update(user);
+                return Result.Success();
+            }
+            return Result.Failure(result.Error);
         }
 
         /// <summary>
@@ -91,14 +108,21 @@ namespace NexusLing.Application.Services
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <param name="uPassword">Новый пароль пользователя</param>
-        public async Task UpdatePasswordAsync(Guid id, ChangePasswordDTO uPassword)
+        public async Task<Result> UpdatePasswordAsync(Guid id, ChangePasswordDTO uPassword)
         {
-            await _validationService.ValidateAndThrowAsync(uPassword);
             if (id != uPassword.Id)
-                throw new NotEqualIdException(id, uPassword.Id);
-            var user = await _repository.UserRepository.GetUserByIdAsync(id) ?? throw new NotFoundException("User", id);
-            user.ChangePassword(_passwordHasher.Hash(uPassword.Password));
-            await _repository.UserRepository.Update(user);
+                return Result.Failure(Error.Conflict("Password.NotEqualId", $"Несовпадение идентификаторов: ожидался '{id}', получен '{uPassword.Id}'"));
+
+            var result = await _validationService.ValidateAsync(uPassword);
+            if (result.IsSuccess)
+            {
+                var user = await _repository.UserRepository.GetUserByIdAsync(id);
+                if (user == null)
+                    return Result.Failure(Error.NotFound("User.NotFound", $"Пользователь с идентификатором '{id}' не найден"));
+                user.ChangePassword(_passwordHasher.Hash(uPassword.Password));
+                await _repository.UserRepository.Update(user);
+            }
+            return Result.Failure(result.Error);
         }
 
         /// <summary>
