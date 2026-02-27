@@ -1,6 +1,4 @@
-﻿using NexusLing.Application.Common.Exceptions;
-using NexusLing.Domain.Common.Exceptions;
-using NexusLing.Domain.Exceptions;
+﻿using NexusLing.Domain.Exceptions;
 using Serilog;
 
 namespace NexusLing.WebApi.Middlewares

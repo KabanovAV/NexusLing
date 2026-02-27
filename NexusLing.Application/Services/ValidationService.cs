@@ -2,10 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using NexusLing.Application.Common;
-using NexusLing.Application.Common.Exceptions;
 using NexusLing.Application.Common.Interfaces;
-using NexusLing.Application.DTOs;
-using NexusLing.Domain.ValueObjects;
 
 namespace NexusLing.Application.Services
 {
