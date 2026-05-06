@@ -58,7 +58,7 @@ namespace NexusLing.WebApi.Controllers
         public async Task<ActionResult<UserDTO>> AddUser([FromBody] RegisterUserDTO rUser)
         {
             var result = await _service.AddUserAsync(rUser);
-            return HandleCreatedResult(result, nameof(GetUser), new { userId = result.Value.Id });
+            return HandleCreatedResult(nameof(GetUser), () => new { id = result.Value.Id }, result);
         }
 
         /// <summary>
